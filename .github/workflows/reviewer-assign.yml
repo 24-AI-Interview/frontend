@@ -16,7 +16,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const reviewers = ['nowybb', 'kiraywlee', 'yeonjelee', 'yeverycode', 'pxibvaw'];
+            const reviewers = ['nowybb', 'yeonjelee', 'yeverycode', 'pxibvaw'];
             
             (async ({github, context}) => {
               const prAuthor = context.actor;
