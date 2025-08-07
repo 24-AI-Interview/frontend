@@ -1,0 +1,17 @@
+/* Button.module.css */
+.btn {
+  width: 97px;
+  height: 50px;
+  background: #3B375A;         /* 기본 배경 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:active {
+  background-color: #2C2947;   /* 클릭 중일 때 (눌렀을 때) 어두운 느낌으로 */
+}
