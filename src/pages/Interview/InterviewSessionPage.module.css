@@ -1,0 +1,69 @@
+:root {
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timerWrap {
+  position: relative;
+  width: 350px;
+  height: 350px;
+}
+
+.timerCenter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.timerLabel {
+  font-family: Pretendard, Pretendard Variable, system-ui, -apple-system, Arial;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.timerNumber {
+  font-family: Pretendard, Pretendard Variable, system-ui, -apple-system, Arial;
+  font-weight: 800;
+  font-size: 72px;
+  line-height: 72px;
+  margin: 4px 0;
+}
+
+.timerUnit {
+  font-family: Pretendard, Pretendard Variable, system-ui, -apple-system, Arial;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.primaryBtn {
+  width: 425px;
+  height: 91px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 24px;
+}
+
+.secondaryBtn {
+  width: 425px;
+  height: 91px;
+  border-radius: 20px;
+  font-size: 24px;
+}
+}

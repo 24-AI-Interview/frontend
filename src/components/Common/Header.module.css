@@ -27,9 +27,9 @@
   gap: 40px;
 }
 
-/* 일반 메뉴 스타일 */
-.menu a {
-  font-family: 'Pretendard Variable', sans-serif;
+/* 링크 기본/활성 상태 */
+.link {
+  font-family: "Pretendard Variable", sans-serif;
   font-size: 17px;
   font-weight: 500;
   color: #525966;
@@ -39,9 +39,7 @@
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
-
-/* 현재 페이지(active) 메뉴 스타일 */
-.menu a.active {
+.active {
   font-weight: 700;
   color: #3b375a;
   border-bottom: 2px solid #3b375a;
@@ -53,28 +51,27 @@
   gap: 12px;
 }
 
-/* 공통 버튼 스타일 */
-button.home,
-button.logout {
+/* 공통 버튼 */
+.btn {
   width: 90px;
   height: 40px;
   border-radius: 50px;
-  font-family: 'Pretendard Variable', sans-serif;
+  font-family: "Pretendard Variable", sans-serif;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
 }
 
 /* 홈 버튼 */
-button.home {
+.home {
   background: #ffffff;
   border: 1px solid #3b375a;
   color: #3b375a;
 }
 
 /* 로그아웃 버튼 */
-button.logout {
+.logout {
   background: #3b375a;
   border: none;
-  color: white;
+  color: #fff;
 }

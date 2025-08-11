@@ -1,0 +1,35 @@
+/* 전역 배경 + 최소 높이 */
+.page-root {
+  background-color: #ebf5fd;
+  min-height: 100vh;
+}
+
+/* 고정 헤더 높이만큼 아래로 */
+.page-main {
+  margin-top: 72px;
+  padding: 0 16px 60px;
+  box-sizing: border-box;
+}
+
+/* (옵션) 히어로 - 마이페이지에선 숨김 */
+.page-hero {
+  padding: 50px 0 20px;
+}
+.page-hero__inner {
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 16px;
+}
+.page-hero__badge {
+  width: 200px; height: 55px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #dbe5f5;
+  border-radius: 50px;
+  font-weight: 700; font-size: 22px; color: #000;
+  display: flex; align-items: center; justify-content: center;
+}
+.page-hero__title {
+  margin-top: 15px; margin-bottom: 10px;
+  font-weight: 500; font-size: 25px; line-height: 44px; color: #000;
+}

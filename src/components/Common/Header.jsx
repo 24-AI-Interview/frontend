@@ -1,31 +1,41 @@
-import React from 'react';
-import './Header.css';
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styles from "./Header.module.css";
 
 const Header = () => {
+  const linkClass = ({ isActive }) =>
+    `${styles.link} ${isActive ? styles.active : ""}`;
+
   return (
-    <header className="header">
-      <nav className="nav">
-        <div className="menu">
-          <NavLink to="/interview-prep" className={({ isActive }) => (isActive ? 'active' : '')}>
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        {/* 좌측 메뉴 */}
+        <div className={styles.menu}>
+          <NavLink to="/interview-prep" className={linkClass}>
             면접 연습
           </NavLink>
-          <NavLink to="/ai-interview" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="/ai-interview" className={linkClass}>
             AI 면접
           </NavLink>
-          <NavLink to="/selfintro" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="/selfintro" className={linkClass}>
             자기소개서 작성
           </NavLink>
-          <NavLink to="/aptitude" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="/aptitude" className={linkClass}>
             인적성 검사
           </NavLink>
-          <NavLink to="/mypage" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink to="/mypage" className={linkClass}>
             마이페이지
           </NavLink>
         </div>
-        <div className="buttons">
-          <button className="home">홈으로</button>
-          <button className="logout">로그아웃</button>
+
+        {/* 우측 버튼 */}
+        <div className={styles.buttons}>
+          <button type="button" className={`${styles.btn} ${styles.home}`}>
+            홈으로
+          </button>
+          <button type="button" className={`${styles.btn} ${styles.logout}`}>
+            로그아웃
+          </button>
         </div>
       </nav>
     </header>
