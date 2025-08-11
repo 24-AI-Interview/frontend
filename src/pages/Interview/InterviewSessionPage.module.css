@@ -1,0 +1,206 @@
+.page {
+  padding: 24px;
+  background: #f7faff;
+}
+
+/* 카드 래퍼 */
+.content {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px;
+}
+.card {
+  width: 100%;
+  max-width: 1200px;
+  background: #ffffff;
+  border: 1px solid #e6ebf4;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(20, 30, 60, 0.08);
+  padding: 28px 28px 32px;
+}
+
+/* 카테고리(회색 캡슐) */
+.categoryWrapper { text-align: center; }
+.categoryLabel {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #eef2f9;
+  color: #2f3b57;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.1;
+  border: 1px solid #d8e1f2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  /* 카테고리-배지 간격은 PageHero padding으로 통제하므로 margin 생략 */
+}
+
+/* PageHero 오버라이드(이 페이지 한정) — padding: 20 16 20 */
+.heroOverride:global(.page-hero) {
+  padding: 20px 16px 35px !important;
+  margin-top: 0 !important;
+}
+
+/* 배지/타이틀 세부 조정 */
+.heroOverride :global(.page-hero__badge) {
+  font-size: 17px;
+  height: 44px;
+  width: 110px;
+  padding: 0;
+  border-color: #cfd9ee;
+}
+.heroOverride :global(.page-hero__title) {
+  font-size: 20px;
+  line-height: 30px;
+  margin-top: 10px;
+  color: #1f2a44;
+  word-break: keep-all;
+}
+
+/* 레이아웃 */
+.container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.videoWrap {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #111;
+  max-width: 100%;
+}
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 타이머 */
+.timerWrap {
+  position: relative;
+  width: 320px;
+  height: 320px;
+}
+.timerCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.timerLabel {
+  font-weight: 700;
+  font-size: 25px;
+  margin-bottom: 4px;
+  color: #2a3553;
+  opacity: 0.95;
+}
+.timerNumber {
+  font-weight: 800;
+  font-size: 65px;
+  line-height: 1;
+  margin: 10px 0;
+  color: #0f1b33;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.timerUnit {
+  font-weight: 600;
+  font-size: 18px;
+  color: #3b4864;
+  opacity: 0.95;
+}
+
+/* 버튼: 페이지 한정 스타일 */
+.buttons {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+  width: 100%;
+  justify-items: center;
+}
+
+/* 텍스트 가독성 보장 */
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* primary (다시 시작) */
+.primaryBtn {
+  width: 300px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  background: #0f1b33;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  border-radius: 22px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  border: none;
+}
+
+/* secondary (완료) */
+.secondaryBtn {
+  width: 300px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  background: #ffffff;
+  color: #0f1b33 !important;
+  border: 3px solid #a0acc7;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+  border-radius: 22px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* 버튼 내부 어떤 요소라도 텍스트 상속 강제 */
+.primaryBtn * ,
+.secondaryBtn * {
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: 1.1 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* 상호작용 */
+.primaryBtn:hover { filter: brightness(1.1); }
+.secondaryBtn:hover { background: #f5f7fa; }
+.primaryBtn:focus-visible,
+.secondaryBtn:focus-visible {
+  outline: 3px solid #7aa2ff;
+  outline-offset: 3px;
+}
+.primaryBtn:active,
+.secondaryBtn:active { transform: translateY(1px); }
+
+/* 반응형 */
+@media (max-width: 960px) {
+  .container { grid-template-columns: 1fr; }
+  .timerWrap { width: 280px; height: 280px; } /* 모바일에서 더 축소 */
+  .primaryBtn, .secondaryBtn {
+    width: 100%;
+    max-width: 480px;
+    height: 60px;
+    font-size: 18px;
+  }
+}
