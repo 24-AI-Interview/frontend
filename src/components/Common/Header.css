@@ -30,7 +30,7 @@
 /* 일반 메뉴 스타일 */
 .menu a {
   font-family: 'Pretendard Variable', sans-serif;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 500;
   color: #525966;
   text-decoration: none;
@@ -58,7 +58,7 @@ button.home,
 button.logout {
   width: 90px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 50px;
   font-family: 'Pretendard Variable', sans-serif;
   font-size: 15px;
   font-weight: 500;
