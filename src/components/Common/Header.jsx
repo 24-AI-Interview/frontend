@@ -1,8 +1,18 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import styles from "./Header.module.css";
 
 const Header = () => {
+  const { pathname } = useLocation();
+
+  // AI 면접 활성 조건:
+  // - /ai-interview  또는
+  // - /interview      (정확히 이 경로) 또는
+  // - /interview/...  (하위 경로)
+  //   → /interview-prep 는 제외됨 (뒤가 '-'이어서 매칭 안 됨)
+  const isAIInterviewActive =
+    pathname.startsWith("/ai-interview") || /^\/interview(\/|$)/.test(pathname);
+
   const linkClass = ({ isActive }) =>
     `${styles.link} ${isActive ? styles.active : ""}`;
 
@@ -14,9 +24,16 @@ const Header = () => {
           <NavLink to="/interview-prep" className={linkClass}>
             면접 연습
           </NavLink>
-          <NavLink to="/ai-interview" className={linkClass}>
+
+          {/* AI 면접: 수동 활성 지정 */}
+          <NavLink
+            to="/ai-interview"
+            className={`${styles.link} ${isAIInterviewActive ? styles.active : ""}`}
+            aria-current={isAIInterviewActive ? "page" : undefined}
+          >
             AI 면접
           </NavLink>
+
           <NavLink to="/selfintro" className={linkClass}>
             자기소개서 작성
           </NavLink>
