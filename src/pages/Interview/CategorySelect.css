@@ -1,0 +1,93 @@
+/* 페이지 루트 배경 */
+.category-select-page {
+  background-color: #ebf5fd;
+  min-height: 100vh;
+}
+
+/* 바깥 컨테이너 (히어로 아래 공통 여백) */
+.category-select-container {
+  max-width: 1320px; /* 인터뷰 준비 페이지와 폭을 비슷하게 */
+  margin: 0 auto;
+  padding: 0 16px 60px;
+  box-sizing: border-box;
+}
+
+/* 큰 둥근 흰 박스: 인터뷰 준비의 .prep-box와 톤 맞춤 */
+.category-select-bigbox {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* 안쪽 레이아웃: 대분류 / 소분류 두 칼럼 */
+.category-select-panel {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .category-select-panel { flex-direction: column; }
+}
+
+/* 각 리스트 카드 (흰색 작은 카드) */
+.category-list {
+  flex: 1;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 16px 16px; /* 상단 간격 줄여서 제목과 박스 간격 최소화 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 그림자 추가로 가시성 강화 */
+  border: 1px solid #f0f0f0; /* 박스 테두리로 시각적 구분 */
+}
+
+/* 리스트 타이틀 */
+.category-list h2 {
+  font-size: 18px;
+  margin: 0 0 12px; /* 타이틀 하단 간격 */
+  padding-top: 10px;
+  padding-bottom: 8px; /* 밑줄과 여백 */
+  border-bottom: 1px solid #eee; /* 하단 얇은 구분선 */
+}
+
+/* 항목 리스트 */
+.category-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 항목 스타일 */
+.category-list li {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.category-list li:hover { background-color: #f5f7fa; }
+.category-list li.active { background-color: #0671e0; color: white; }
+
+/* 대분류 미선택시 플레이스홀더 */
+.placeholder { color: #999; }
+
+/* 선택 결과 영역 (큰 박스 내부 하단) */
+.category-preview {
+  background: #fafafb;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* 버튼 */
+.btn-primary {
+  background-color: #3b375a;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-primary:hover { background-color: #4c4870; }
