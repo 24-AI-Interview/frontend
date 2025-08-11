@@ -1,25 +1,30 @@
-.container {
+/* ===== Basic Info (BEM) ===== */
+
+/* Block root */
+.basic-info {
   position: relative;
   width: 1440px;
   height: 1024px;
   background: #ebf5fd;
-  padding: 122px 64px;
+  padding: 30px 64px;
   box-sizing: border-box;
 }
 
-.title {
+/* Title */
+.basic-info__title {
   font-size: 24px;
   font-weight: 600;
   color: #000000;
   margin-bottom: 32px;
 }
 
-.tabWrapper {
+/* Tabs */
+.basic-info__tabs {
   display: flex;
   margin-bottom: 36px;
 }
 
-.tab {
+.basic-info__tab {
   width: 320px;
   height: 59px;
   display: flex;
@@ -30,66 +35,115 @@
   border: 1px solid #e9e9ea;
   background: #fbfbfb;
   color: #000;
+  cursor: pointer;
 }
 
-.active {
+.basic-info__tab--active {
   background: #3b375a;
-  color: white;
+  color: #ffffff;
 }
 
-.box {
+/* Content box */
+.basic-info__box {
   background: #ffffff;
   width: 1312px;
-  padding: 40px 64px;
+  padding: 8px 64px; /* 상단 공간 줄임 */
   box-sizing: border-box;
 }
 
-.sectionTitle {
-  font-size: 24px;
-  font-weight: 600;
+/* Section title */
+.basic-info__section-title {
+  font-size: 22px;
+  font-weight: 700;
   color: #000000;
-  margin-bottom: 20px;
+  margin: 20 0 15px 0;
 }
 
-.separatorMain {
-  border: 2px solid #3b375a;
-  margin-bottom: 16px;
-}
-
-.separator {
+/* Separators */
+.basic-info__separator {
+  width: 100%;
   border: 1px solid #f2f2f3;
   margin: 16px 0;
 }
 
-.row {
+.basic-info__separator--main {
+  border: 1px solid #3b375a;
+  margin-bottom: 16px;
+}
+
+/* Rows */
+.basic-info__row,
+.basic-info__row--group {
   display: flex;
-  align-items: center;
-  gap: 24px;
+  align-items: flex-start; /* 텍스트와 입력 필드를 상단에 정렬 */
+  gap: 100px;
 }
 
-.label {
-  width: 100px;
-  font-size: 20px;
+/* Label */
+.basic-info__label {
+  width: 120px;        /* 라벨 너비 고정 */
+  height: auto;        /* 내용에 따라 높이 자동 */
+  padding-top: 7px; 
+  font-size: 17px;
   font-weight: 600;
+  color: #000;
 }
 
-.value {
-  font-size: 20px;
-  font-weight: 400;
-}
-
-.input {
-  width: 269px;
-  height: 50px;
-  border: 1px solid #e6e5e7;
-  padding: 0 12px;
-  font-size: 15px;
+/* Value (읽기 전용 값) */
+.basic-info__value {
+  padding-top: 6px; 
+  font-size: 17px;
   font-weight: 400;
   color: #000;
 }
 
-.inputDescription {
+/* Field (입력 + 설명 묶음) */
+.basic-info__field {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Field inline: 한 줄 배치(관심 분야/직무 등) */
+.basic-info__field--inline {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;   /* 한 줄 */
+  align-items: center;
+  gap: 12px;
+}
+
+/* Input row (input + button) */
+.basic-info__input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Input (반응형 너비 개선 포함) */
+.basic-info__input {
+  height: 52px;
+  border: 1px solid #e6e5e7;
+  padding: 0 12px;
+  font-size: 15px;
+  box-sizing: border-box;
+
+  /* 넓게 + 반응형 */
+  flex: 1 1 560px;   /* 기본 560px 정도 */
+  min-width: 360px;  /* 하한선 */
+  max-width: 800px;  /* 상한선 */
+}
+
+/* Input wider (특정 줄만 더 넓게: 관심 분야/직무 등) */
+.basic-info__input--wide {
+  flex: 1 1 720px;
+  max-width: 960px;
+}
+
+/* Input description */
+.basic-info__input-desc {
   font-size: 13px;
   color: #b5b2b9;
-  margin-top: 8px;
+  margin: 0;
 }

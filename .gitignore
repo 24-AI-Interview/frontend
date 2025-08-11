@@ -44,3 +44,7 @@ yarn-error.log*
 
 .DS_Store
 node_modules/
+node_modules/
+**/.cache/
+node_modules/
+**/.cache/
