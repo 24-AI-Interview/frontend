@@ -1,149 +1,133 @@
-/* ===== Basic Info (BEM) ===== */
-
-/* Block root */
-.basic-info {
-  position: relative;
-  width: 1440px;
-  height: 1024px;
-  background: #ebf5fd;
-  padding: 30px 64px;
+/* ===== 마이페이지 전용 컨테이너 ===== */
+.mypage-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 72px 0 0; /* 헤더 높이(72px)만큼 위쪽 여백 */
   box-sizing: border-box;
 }
 
-/* Title */
-.basic-info__title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #000000;
-  margin-bottom: 32px;
+/* 큰 둥근 흰 박스 */
+.bigbox {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 24px;
+  box-sizing: border-box;
 }
+
+/* ===== Basic Info (BEM) ===== */
 
 /* Tabs */
 .basic-info__tabs {
   display: flex;
-  margin-bottom: 36px;
+  gap: 8px;
+  margin-bottom: 24px;
 }
-
 .basic-info__tab {
-  width: 320px;
-  height: 59px;
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: 10px 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   border: 1px solid #e9e9ea;
   background: #fbfbfb;
   color: #000;
   cursor: pointer;
+  border-radius: 10px;
 }
-
 .basic-info__tab--active {
   background: #3b375a;
   color: #ffffff;
+  border-color: #3b375a;
 }
 
-/* Content box */
+/* Content box (inner white box) */
 .basic-info__box {
   background: #ffffff;
-  width: 1312px;
-  padding: 8px 64px; /* 상단 공간 줄임 */
-  box-sizing: border-box;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 /* Section title */
 .basic-info__section-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #000000;
-  margin: 20 0 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
-/* Separators */
-.basic-info__separator {
-  width: 100%;
-  border: 1px solid #f2f2f3;
+/* 구분선 */
+.basic-info__separator--main {
+  border: none;
+  border-top: 2px solid #e9e9ea;
   margin: 16px 0;
 }
-
-.basic-info__separator--main {
-  border: 1px solid #3b375a;
-  margin-bottom: 16px;
+.basic-info__separator {
+  border: none;
+  border-top: 1px solid #e9e9ea;
+  margin: 12px 0;
 }
 
-/* Rows */
+/* Row */
 .basic-info__row,
 .basic-info__row--group {
   display: flex;
-  align-items: flex-start; /* 텍스트와 입력 필드를 상단에 정렬 */
-  gap: 100px;
+  align-items: flex-start;
+  gap: 16px;
+}
+.basic-info__row {
+  justify-content: space-between;
 }
 
-/* Label */
 .basic-info__label {
-  width: 120px;        /* 라벨 너비 고정 */
-  height: auto;        /* 내용에 따라 높이 자동 */
-  padding-top: 7px; 
-  font-size: 17px;
-  font-weight: 600;
-  color: #000;
+  width: 140px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 38px;
 }
 
-/* Value (읽기 전용 값) */
 .basic-info__value {
-  padding-top: 6px; 
-  font-size: 17px;
-  font-weight: 400;
-  color: #000;
+  flex: 1;
+  font-size: 15px;
+  line-height: 38px;
 }
 
-/* Field (입력 + 설명 묶음) */
+/* Field (input + 설명) */
 .basic-info__field {
-  flex-grow: 1;
+  flex: 1;
+}
+.basic-info__field--inline {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+}
+
+/* Input row */
+.basic-info__input-row {
+  display: flex;
   gap: 8px;
 }
 
-/* Field inline: 한 줄 배치(관심 분야/직무 등) */
-.basic-info__field--inline {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row;   /* 한 줄 */
-  align-items: center;
-  gap: 12px;
-}
-
-/* Input row (input + button) */
-.basic-info__input-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Input (반응형 너비 개선 포함) */
 .basic-info__input {
-  height: 52px;
-  border: 1px solid #e6e5e7;
-  padding: 0 12px;
-  font-size: 15px;
-  box-sizing: border-box;
-
-  /* 넓게 + 반응형 */
-  flex: 1 1 560px;   /* 기본 560px 정도 */
-  min-width: 360px;  /* 하한선 */
-  max-width: 800px;  /* 상한선 */
+  flex: 1;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid #e9e9ea;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
-/* Input wider (특정 줄만 더 넓게: 관심 분야/직무 등) */
 .basic-info__input--wide {
-  flex: 1 1 720px;
-  max-width: 960px;
+  width: 100%;
 }
 
-/* Input description */
 .basic-info__input-desc {
-  font-size: 13px;
-  color: #b5b2b9;
-  margin: 0;
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
 }
