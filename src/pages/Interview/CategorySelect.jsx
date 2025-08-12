@@ -56,8 +56,10 @@ export default function CategorySelect() {
       "최근 해결한 문제와 접근 방법은?",
       "협업 과정에서 갈등 해결 경험은?",
     ];
-    navigate("/interview/session", {
-      state: { job: `${selectedMajor}/${selectedMinor}`, questions },
+    navigate("/interview/precheck", {
+          state: { 
+            job: `${selectedMajor}/${selectedMinor}`, questions 
+           },
     });
   };
 
