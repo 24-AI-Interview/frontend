@@ -1,0 +1,35 @@
+/* -------------------------------------------
+   File: src/pages/Interview/CategorySelect.module.css
+-------------------------------------------- */
+
+.page { background-color:#ebf5fd; min-height:100vh; }
+
+.container { max-width:1320px; margin:0 auto; padding:0 16px 60px; box-sizing:border-box; }
+
+.bigbox {
+  width:100%; max-width:1300px; margin:0 auto; background:#fff; border-radius:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:24px; box-sizing:border-box;
+}
+
+.panel { display:flex; gap:24px; margin-bottom:24px; }
+@media (max-width:900px){ .panel { flex-direction:column; } }
+
+.list {
+  flex:1; background:#fff; border-radius:8px; padding:8px 16px 16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08); border:1px solid #f0f0f0;
+}
+.list h2 { font-size:18px; margin:0 0 12px; padding:10px 0 8px; border-bottom:1px solid #eee; }
+.list ul { list-style:none; margin:0; padding:0; }
+
+.item { padding:8px 12px; border-radius:4px; cursor:pointer; }
+.item:hover { background-color:#f5f7fa; }
+.active { background-color:#0671e0; color:#fff; }
+
+.placeholder { color:#999; }
+
+.preview { background:#fafafb; padding:16px; border-radius:8px; text-align:center; }
+
+.btnPrimary {
+  background-color:#3b375a; color:#fff; padding:8px 16px; border:none; border-radius:4px; cursor:pointer;
+}
+.btnPrimary:hover { background-color:#4c4870; }

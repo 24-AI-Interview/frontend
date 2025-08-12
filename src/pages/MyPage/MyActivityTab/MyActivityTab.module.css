@@ -1,0 +1,39 @@
+/* File: src/pages/MyPage/MyActivityTab/MyActivityTab.module.css */
+.wrapper { display: grid; gap: 12px; }
+
+.subtabs { display: flex; gap: 8px; }
+.subtab {
+  flex: 0 0 auto; min-height: 36px; padding: 8px 12px;
+  border:1px solid #e9e9ea; border-radius: 999px; background:#fbfbfb; cursor:pointer;
+  font-weight:600;
+}
+.active { background:#3b375a; color:#fff; border-color:#3b375a; }
+
+.panel { border:1px solid #e9e9ea; border-radius: 12px; padding: 16px; background:#fff; }
+
+.loading { color:#666; padding: 8px 0; }
+.error { color:#d62f2f; padding: 8px 0; }
+.empty { color:#444; padding: 16px 0; display:flex; flex-direction:column; gap: 12px; }
+
+.listWrap { display: grid; gap: 12px; }
+.toolbar { display:flex; justify-content:space-between; align-items:center; gap: 12px; }
+.select { min-height: 36px; border:1px solid #e9e9ea; border-radius:8px; padding: 6px 10px; }
+
+.cardList { list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+.card {
+  border:1px solid #e9e9ea; border-radius:12px; padding:12px; background:#fff;
+  display:grid; gap:10px;
+}
+.cardHead { display:flex; justify-content:space-between; align-items:center; gap: 12px; }
+.cardTitle { font-size:16px; font-weight:700; margin:0; }
+.cardMeta { display:flex; gap:12px; color:#555; }
+.cardActions { display:flex; gap: 8px; }
+.muted { color:#777; font-size:13px; }
+
+.tags { display:flex; flex-wrap:wrap; gap:6px; }
+.tag { border:1px solid #e9e9ea; border-radius:999px; padding:4px 8px; background:#fbfbfb; font-size:12px; }
+
+@media (max-width: 860px) {
+  .cardHead { flex-direction: column; align-items:flex-start; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+}

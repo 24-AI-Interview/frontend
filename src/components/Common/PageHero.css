@@ -1,0 +1,43 @@
+/* 공통 히어로 (배경은 페이지가 결정) */
+.page-hero {
+  padding: 50px 16px 20px; /* 상단 여백, 하단 살짝 */
+}
+
+/* 가운데 고정 폭 + 중앙정렬 */
+.page-hero__inner {
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 배지: 200x55, 라운드 캡슐 */
+.page-hero__badge {
+  width: 200px;
+  height: 55px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 50px;
+  font-family: "Pretendard Variable", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #000;
+  border: 1px solid #dbe5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 타이틀 */
+.page-hero__title {
+  font-family: "Pretendard Variable", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 44px;
+  color: #525966;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+/* NOTE:
+   - 고정 헤더를 쓰면 App.css의 main { margin-top: 72px; } 유지
+   - 페이지 배경색은 각 페이지 루트에서 설정 (wrapper에 배경색 지정)
+*/
