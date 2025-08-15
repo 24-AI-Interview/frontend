@@ -6,6 +6,8 @@ import CategorySelect from "./pages/Interview/CategorySelect";
 import InterviewPrep from './pages/InterviewPrep/InterviewPrepPage';
 import InterviewSessionPage from './pages/Interview/InterviewSessionPage';
 import SelfIntroPage from './pages/SelfIntro/SelfIntroPage';
+import AiSelfIntroPage from './pages/SelfIntro/AiSelfIntroPage';
+
 import "./App.css";
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
           <Route path="/interview-prep" element={<InterviewPrep />} />
           <Route path="/interview/session" element={<InterviewSessionPage />} />
           <Route path="/selfintro" element={<SelfIntroPage />} />
+          <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
         </Routes>
       </main>
     </Router>
