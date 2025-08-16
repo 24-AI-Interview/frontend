@@ -1,0 +1,269 @@
+/* -------------------------------------------------------
+   File: src/pages/SelfIntro/AiSelfIntroPage.module.css
+------------------------------------------------------- */
+
+/* 페이지 전체 배경 및 기본 레이아웃 */
+.page {
+  background: #ebf5fd;
+  min-height: 100vh;
+}
+
+/* 히어로 아래 폼바 */
+.formBar {
+  max-width: 1200px;
+  margin: 0 auto 16px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.select label {
+  font-size: 13px;
+  color: #3a4669;
+  font-weight: 700;
+}
+
+/* 커스텀 셀렉트 스타일 + 화살표 아이콘 */
+.select select {
+  background-color: #fff;
+  border: 1px solid #d7def0;
+  border-radius: 10px;
+  padding: 10px 36px 10px 12px; /* 오른쪽 패딩 늘려서 화살표 공간 확보 */
+  font-size: 14px;
+  color: #27314d;
+  box-shadow: 0 4px 10px rgba(20, 30, 60, 0.08);
+  appearance: none; /* 기본 화살표 제거 */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2327314d' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 20px center; /* 화살표 위치 조정 */
+  background-size: 30px;
+}
+
+/* 모드 선택 카드 (직접 입력 / 파일 업로드 / 저장 목록) */
+.modeCards {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.modeCard {
+  background: #fff;
+  border: 1px solid #e1e6f3;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+}
+
+.modeCard strong {
+  display: block;
+  color: #1f2a44;
+}
+
+.modeCard span {
+  display: block;
+  margin-top: 6px;
+  color: #647093;
+  font-size: 13px;
+}
+
+/* 활성화된 모드 카드 */
+.active {
+  outline: 3px solid #7aa2ff;
+}
+
+/* 모드별 컨텐츠 패널 */
+.panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 10px;
+}
+
+/* 직접 입력 모드 */
+.inputWrap {
+  position: relative;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  background: #fff;
+  border: 1px solid #e1e6f3;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+  font-family: "Pretendard Variable", sans-serif;
+}
+
+/* 글자 수 카운터 */
+.counter {
+  position: absolute;
+  right: 18px;
+  bottom: 10px;
+  font-size: 12px;
+  color: #8a93ad;
+}
+
+/* 파일 업로드 모드 */
+.drop {
+  background: #fff;
+  border: 2px dashed #bfc9eb;
+  border-radius: 14px;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+}
+
+.file {
+  display: none;
+}
+
+.dropInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 28px;
+  width: 100%;
+  text-align: center;
+}
+
+.dropTitle {
+  color: #2a3553;
+  font-weight: 700;
+}
+
+.fileName {
+  color: #2a3553;
+  font-weight: 800;
+}
+
+.fileHint {
+  color: #8a93ad;
+  font-size: 12px;
+}
+
+/* 저장된 자기소개서 모드 */
+.stageChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #cfd6ec;
+  background: #fafbff;
+  color: #2f2a4f;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.chipActive {
+  background: #eef2ff;
+  border-color: #a7b5f7;
+}
+
+/* 저장 항목 리스트 */
+.savedList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.savedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #e1e6f3;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+  cursor: pointer;
+}
+
+.savedItem input {
+  display: none;
+}
+
+.savedActive {
+  outline: 3px solid #7aa2ff;
+}
+
+.savedTitle {
+  font-weight: 800;
+  color: #1f2a44;
+}
+
+.savedMeta {
+  color: #8a93ad;
+  font-size: 12px;
+}
+
+/* 비어 있을 때 메시지 */
+.emptySaved {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #8a93ad;
+  padding: 24px 0;
+}
+
+/* 하단 버튼 (첨삭 요청) */
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 18px 16px 40px;
+}
+
+.primaryBtn {
+  width: auto !important;
+  height: auto !important;
+  padding: 14px 28px !important;
+  border: 3px solid transparent !important;
+  border-radius: 28px !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  /* 배경: 흰색 내부 + 그라데이션 보더 */
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(90deg, #a798e2, #2430e0) border-box !important;
+  color: #5c63f2 !important;
+  box-shadow: 0 6px 18px rgba(20, 30, 60, 0.12) !important;
+}
+
+.primaryBtn:hover {
+  background: linear-gradient(#f9f9ff, #f9f9ff) padding-box,
+    linear-gradient(90deg, #a798e2, #2430e0) border-box !important;
+}
+
+/* 반응형 */
+@media (max-width: 960px) {
+  .formBar {
+    grid-template-columns: 1fr;
+  }
+  .modeCards {
+    grid-template-columns: 1fr;
+  }
+  .savedList {
+    grid-template-columns: 1fr;
+  }
+}
