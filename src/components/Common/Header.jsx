@@ -1,20 +1,20 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 
 const Header = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  // AI 면접 활성 조건:
-  // - /ai-interview  또는
-  // - /interview      (정확히 이 경로) 또는
-  // - /interview/...  (하위 경로)
-  //   → /interview-prep 는 제외됨 (뒤가 '-'이어서 매칭 안 됨)
+  // AI 면접 활성 조건
   const isAIInterviewActive =
     pathname.startsWith("/ai-interview") || /^\/interview(\/|$)/.test(pathname);
 
   const linkClass = ({ isActive }) =>
     `${styles.link} ${isActive ? styles.active : ""}`;
+
+  // 메인(/)에서는 '회원가입 / 로그인', 그 외에는 '홈으로 / 로그아웃'
+  const isHome = pathname === "/";
 
   return (
     <header className={styles.header}>
@@ -25,7 +25,6 @@ const Header = () => {
             면접 연습
           </NavLink>
 
-          {/* AI 면접: 수동 활성 지정 */}
           <NavLink
             to="/ai-interview"
             className={`${styles.link} ${isAIInterviewActive ? styles.active : ""}`}
@@ -47,12 +46,43 @@ const Header = () => {
 
         {/* 우측 버튼 */}
         <div className={styles.buttons}>
-          <button type="button" className={`${styles.btn} ${styles.home}`}>
-            홈으로
-          </button>
-          <button type="button" className={`${styles.btn} ${styles.logout}`}>
-            로그아웃
-          </button>
+          {isHome ? (
+            <>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.home}`}
+                // TODO: 회원가입 페이지 라우트 연결 시 교체
+                onClick={() => alert("회원가입 페이지로 연결해주세요.")}
+              >
+                회원가입
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.logout}`}
+                // TODO: 로그인 페이지 라우트 연결 시 교체
+                onClick={() => alert("로그인 페이지로 연결해주세요.")}
+              >
+                로그인
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.home}`}
+                onClick={() => navigate("/")}
+              >
+                홈으로
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.logout}`}
+                onClick={() => alert("로그아웃 로직을 연결해주세요.")}
+              >
+                로그아웃
+              </button>
+            </>
+          )}
         </div>
       </nav>
     </header>
