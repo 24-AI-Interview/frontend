@@ -1,12 +1,15 @@
+// File: src/pages/Interview/InterviewSessionPage.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation /*, useNavigate */ } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import PageHero from "../../components/Common/PageHero";
 import styles from "./InterviewSessionPage.module.css";
 
 export default function InterviewSessionPage() {
   const { state } = useLocation();
+  // const navigate = useNavigate();
 
+  // 질문/직무: Precheck → navigate(... { state }) 경로가 없을 때도 동작하도록 기본값 제공
   const questions =
     Array.isArray(state?.questions) && state.questions.length > 0
       ? state.questions
@@ -17,18 +20,19 @@ export default function InterviewSessionPage() {
         ];
 
   const job =
-    state?.job ||
-    "경영·인사·총무·사무/인사·인재개발·채용·교육·HR";
+    state?.job || "경영·인사·총무·사무/인사·인재개발·채용·교육·HR";
 
+  // 진행 중 질문 인덱스
   const [index, setIndex] = useState(0);
   const currentQuestion = questions[index];
 
+  // 타이머
   const ANSWER_SECONDS = 60;
   const [secondsLeft, setSecondsLeft] = useState(ANSWER_SECONDS);
   const [isRunning, setIsRunning] = useState(true);
   const timerRef = useRef(null);
 
-  // 타이머: svg 320px, 반지름 150으로 살짝 축소
+  // 원형 진행바 계산
   const radius = 150;
   const circumference = 2 * Math.PI * radius;
   const progress = (ANSWER_SECONDS - secondsLeft) / ANSWER_SECONDS;
@@ -49,28 +53,38 @@ export default function InterviewSessionPage() {
           audio: false,
         });
         streamRef.current = stream;
-        if (videoRef.current) videoRef.current.srcObject = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          // 일부 브라우저는 autoplay 속성만으론 부족해서 play() 호출 필요
+          await videoRef.current.play().catch(() => {});
+        }
       } catch (err) {
         console.error("웹캠 접근 실패:", err);
       }
     })();
     return () => {
-      if (streamRef.current) streamRef.current.getTracks().forEach((t) => t.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+      }
     };
   }, []);
 
   const handleComplete = () => {
     setIsRunning(false);
     if (index < questions.length - 1) {
+      // 다음 질문으로
       setIndex((i) => i + 1);
       setSecondsLeft(ANSWER_SECONDS);
       setIsRunning(true);
     } else {
+      // 모든 질문 완료
       alert("모든 질문이 완료되었습니다.");
+      // 결과 페이지가 있다면 아래 주석 해제해서 사용
       // navigate("/interview/result", { state: { job, questions } });
     }
   };
 
+  // 타이머 동작
   useEffect(() => {
     if (!isRunning) return;
     timerRef.current = setInterval(() => {
@@ -97,7 +111,7 @@ export default function InterviewSessionPage() {
             <span className={styles.categoryLabel}>{job}</span>
           </div>
 
-          {/* 배지(진행도만) + 타이틀(질문) — 이 페이지 한정으로 padding 20 16 20 */}
+          {/* 배지(진행도) + 타이틀(질문) */}
           <PageHero
             className={styles.heroOverride}
             badge={`${index + 1}/${questions.length}`}
@@ -158,10 +172,7 @@ export default function InterviewSessionPage() {
                 >
                   {isRunning ? "일시정지" : "다시 시작"}
                 </Button>
-                <Button
-                  className={styles.secondaryBtn}
-                  onClick={handleComplete}
-                >
+                <Button className={styles.secondaryBtn} onClick={handleComplete}>
                   완료
                 </Button>
               </div>

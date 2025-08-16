@@ -1,0 +1,80 @@
+/* 헤더 영역 고정 */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  z-index: 100;
+  border-bottom: 1px solid #e6e5e7;
+}
+
+/* 콘텐츠 너비 1312px에 맞춤 */
+.nav {
+  width: 1312px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 좌측 메뉴 영역 */
+.menu {
+  display: flex;
+  gap: 40px;
+}
+
+/* 일반 메뉴 스타일 */
+.menu a {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #525966;
+  text-decoration: none;
+  line-height: 44px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+/* 현재 페이지(active) 메뉴 스타일 */
+.menu a.active {
+  font-weight: 700;
+  color: #3b375a;
+  border-bottom: 2px solid #3b375a;
+}
+
+/* 우측 버튼 영역 */
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* 공통 버튼 스타일 */
+button.home,
+button.logout {
+  width: 90px;
+  height: 40px;
+  border-radius: 50px;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* 홈 버튼 */
+button.home {
+  background: #ffffff;
+  border: 1px solid #3b375a;
+  color: #3b375a;
+}
+
+/* 로그아웃 버튼 */
+button.logout {
+  background: #3b375a;
+  border: none;
+  color: white;
+}

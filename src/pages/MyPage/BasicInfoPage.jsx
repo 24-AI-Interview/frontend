@@ -1,8 +1,10 @@
 // File: src/pages/MyPage/BasicInfoPage.jsx
 import React, { useState } from "react";
-import styles from "./BasicInfoPage.module.css"; // ✅ 같은 폴더의 모듈 CSS
+import styles from "./BasicInfoPage.module.css";
 import Button from "../../components/Common/Button";
 import PageLayout from "../../layouts/PageLayout";
+import SpecTab from "./SpecTab/SpecTab";
+import MyActivityTab from "./MyActivityTab/MyActivityTab";
 
 export default function BasicInfoPage() {
   const [activeTab, setActiveTab] = useState("기본정보");
@@ -27,14 +29,15 @@ export default function BasicInfoPage() {
     return { text, onClick: map[text] ?? (() => {}) };
   };
 
+  const tabs = ["기본정보", "스펙관리", "내 활동", "비밀번호 변경·탈퇴"];
+
   return (
     <PageLayout showHero={false}>
-      {/* 마이페이지 전용 컨테이너(헤더-컨텐츠 간격 포함) */}
       <div className={styles["mypage-container"]}>
         <div className={styles.bigbox}>
-          {/* 탭 */}
+          {/* 상단 탭 */}
           <div className={styles["basic-info__tabs"]}>
-            {["기본정보", "스펙관리", "비밀번호 변경", "회원 탈퇴"].map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab}
                 type="button"
@@ -53,9 +56,9 @@ export default function BasicInfoPage() {
             <h3 className={styles["basic-info__section-title"]}>{activeTab}</h3>
             <hr className={styles["basic-info__separator--main"]} />
 
+            {/* 기본정보 */}
             {activeTab === "기본정보" && (
               <>
-                {/* 아이디 */}
                 <div className={styles["basic-info__row"]}>
                   <label className={styles["basic-info__label"]}>아이디</label>
                   <span className={styles["basic-info__value"]}>
@@ -64,14 +67,12 @@ export default function BasicInfoPage() {
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
-                {/* 이름 */}
                 <div className={styles["basic-info__row"]}>
                   <label className={styles["basic-info__label"]}>이름</label>
                   <span className={styles["basic-info__value"]}>예인</span>
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
-                {/* 닉네임 */}
                 <div className={styles["basic-info__row--group"]}>
                   <label className={styles["basic-info__label"]}>닉네임</label>
                   <div className={styles["basic-info__field"]}>
@@ -92,7 +93,6 @@ export default function BasicInfoPage() {
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
-                {/* 이메일 */}
                 <div className={styles["basic-info__row--group"]}>
                   <label className={styles["basic-info__label"]}>이메일</label>
                   <div className={styles["basic-info__field"]}>
@@ -113,7 +113,6 @@ export default function BasicInfoPage() {
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
-                {/* 휴대폰 번호 */}
                 <div className={styles["basic-info__row--group"]}>
                   <label className={styles["basic-info__label"]}>휴대폰 번호</label>
                   <div className={styles["basic-info__field"]}>
@@ -134,11 +133,8 @@ export default function BasicInfoPage() {
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
-                {/* 관심 분야 / 직무 */}
                 <div className={styles["basic-info__row--group"]}>
-                  <label className={styles["basic-info__label"]}>
-                    관심 분야 / 직무
-                  </label>
+                  <label className={styles["basic-info__label"]}>관심 분야 / 직무</label>
                   <div
                     className={`${styles["basic-info__field"]} ${styles["basic-info__field--inline"]}`}
                   >
@@ -152,6 +148,19 @@ export default function BasicInfoPage() {
                   </div>
                 </div>
               </>
+            )}
+
+            {/* 스펙관리 */}
+            {activeTab === "스펙관리" && <SpecTab />}
+
+            {/* 내 활동: 자기소개서/스크랩 채용/면접 기록 */}
+            {activeTab === "내 활동" && <MyActivityTab />}
+
+            {/* 플레이스홀더 */}
+            {activeTab === "비밀번호 변경·탈퇴" && (
+              <div style={{ padding: "12px 0", color: "#777" }}>
+                비밀번호 변경 및 회원 탈퇴 화면 준비 중
+              </div>
             )}
           </div>
         </div>
