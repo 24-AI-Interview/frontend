@@ -1,4 +1,4 @@
-// File: src/App.js (또는 App.jsx)
+// File: src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -10,8 +10,10 @@ import CategorySelect from './pages/Interview/CategorySelect';
 import Precheck from './pages/Interview/Precheck';
 import InterviewSessionPage from './pages/Interview/InterviewSessionPage';
 
-// 필요할 때만 유지하세요. (파일 없으면 이 줄 삭제)
-// import './App.css';
+import SelfIntroPage from './pages/SelfIntro/SelfIntroPage';
+import AiSelfIntroPage from './pages/SelfIntro/AiSelfIntroPage';
+
+import './App.css';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/ai-interview" element={<CategorySelect />} />
           <Route path="/interview/precheck" element={<Precheck />} />
           <Route path="/interview/session" element={<InterviewSessionPage />} />
+          <Route path="/selfintro" element={<SelfIntroPage />} />
+          <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
         </Routes>
       </main>
     </Router>

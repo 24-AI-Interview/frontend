@@ -1,0 +1,399 @@
+/* -----------------------------------------------------
+   File: src/pages/SelfIntro/SelfIntroPage.module.css
+----------------------------------------------------- */
+
+.page {
+  background: #ebf5fd;
+  min-height: 100vh;
+}
+
+/* 상단 툴바 */
+.toolbar {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 16px 22px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selects {
+  display: flex;
+  gap: 10px;
+}
+
+/* 드롭다운 select 스타일 (화살표) */
+.select select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  border: 1px solid #d7def0;
+  border-radius: 10px;
+  /* 왼쪽 글자 여백 줄이고 오른쪽 화살표 공간 확보 */
+  padding: 10px 36px 10px 12px;
+  font-size: 14px;
+  min-width: 120px;
+  color: #27314d;
+  box-shadow: 0 4px 10px rgba(20, 30, 60, 0.08);
+  /* 화살표 추가 */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2327314d' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  /* 화살표 위치 조정 */
+  background-size: 20px;
+}
+
+/* 툴바 오른쪽 묶음 */
+.rightTools {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* 검색창 */
+.search {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  gap: 8px;
+  border: 1px solid #d7def0;
+  border-radius: 12px;
+  padding: 6px 14px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 4px 10px rgba(20, 30, 60, 0.08);
+}
+
+.search input {
+  border: 0;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
+
+.searchIcon {
+  opacity: 0.6;
+}
+
+/* ===== AI 첨삭 버튼 (그라데이션) ===== */
+.aiBtn {
+  /* Button.module.css의 width/height 덮어쓰기 */
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 26px !important;
+  border: 3px solid transparent !important;
+  border-radius: 28px !important;
+  /* 버튼 그라데이션 */
+  background: linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(90deg, #a798e2, #2430e0) border-box !important;
+  /* 텍스트 색상 */
+  color: #5c63f2 !important;
+  font-weight: 700 !important;
+  font-size: 20px !important;
+  letter-spacing: 0.2px;
+  /* 그림자 */
+  box-shadow: 0 6px 18px rgba(20, 30, 60, 0.12) !important;
+  /* 클릭감 */
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.aiBtn:hover {
+  background: linear-gradient(#f9f9ff, #f9f9ff) padding-box,
+    linear-gradient(90deg, #a798e2, #2430e0) border-box !important;
+  box-shadow: 0 8px 22px rgba(20, 30, 60, 0.16) !important;
+}
+
+.aiBtn:active {
+  transform: translateY(1px);
+}
+
+/* 보드 (컬럼형 카드 리스트) */
+.board {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.column {
+  background: #ffffff;
+  border: 1px solid #e6ebf4;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(20, 30, 60, 0.08);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+}
+
+/* 컬럼 헤더 */
+.colHeader {
+  background: #322d52;
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: inset 0 0 0 1px #47406d;
+}
+
+.colTitle {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.counter {
+  background: #ffffff;
+  color: #322d52;
+  font-weight: 800;
+  width: 28px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid #cfd3ea;
+}
+
+/* 카드 추가 버튼 */
+.addCard {
+  margin: 12px 0;
+  width: 100%;
+  text-align: left;
+  background: #f3f5fb;
+  border: 1px dashed #c6cde6;
+  color: #2f2a4f;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.addCard:hover {
+  background: #eef2fb;
+}
+
+/* 카드 리스트 */
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  padding-bottom: 6px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+  padding: 12px;
+}
+
+/* 카드 헤더와 내용 */
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 14px;
+  color: #1f2a44;
+  font-weight: 800;
+}
+
+.cardMenu {
+  background: transparent;
+  border: 0;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  color: #6b7391;
+}
+
+.cardMeta {
+  margin-top: 6px;
+  color: #4a5678;
+  font-size: 13px;
+}
+
+.cardDate {
+  margin-top: 4px;
+  color: #8a93ad;
+  font-size: 12px;
+}
+
+/* 카드 하단 퀵 버튼 */
+.quickMoves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.quickBtn {
+  border: 1px solid #cfd6ec;
+  background: #fafbff;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.quickBtn:hover {
+  background: #f1f4ff;
+}
+
+/* 모달 (팝업) */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 30, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: min(720px, 92vw);
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 1px solid #e6ebf4;
+}
+
+.modalHeader {
+  padding: 16px 18px;
+  border-bottom: 1px solid #eef1f7;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1f2a44;
+}
+
+.modalBody {
+  padding: 16px 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field > span {
+  font-size: 13px;
+  color: #3a4669;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  border: 1px solid #d7def0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+
+  font-family: "Pretendard Variable", sans-serif;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  font-family: "Pretendard Variable", sans-serif;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+/* 모달 하단 버튼 */
+.modalFooter {
+  padding: 14px 18px;
+  border-top: 1px solid #eef1f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+}
+
+.primaryBtn {
+  width: 120px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 800;
+  background: #0f1b33;
+  color: #fff !important;
+  border: none;
+  border-radius: 12px;
+}
+
+.secondaryBtn {
+  width: 120px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 800;
+  background: #ffffff;
+  color: #0f1b33 !important;
+  border: 2px solid #a0acc7;
+  border-radius: 12px;
+}
+
+.deleteBtn {
+  background: #fff0f0;
+  color: #b31919 !important;
+  border: 1px solid #f1c8c8;
+  border-radius: 10px;
+  height: 40px;
+  padding: 0 14px;
+  font-weight: 800;
+}
+
+/* 반응형 */
+@media (max-width: 1180px) {
+  .board {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rightTools {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .aiBtn {
+    width: 100%;
+  }
+
+  .board {
+    grid-template-columns: 1fr;
+  }
+}
