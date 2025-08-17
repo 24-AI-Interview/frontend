@@ -2,7 +2,7 @@
 
 /* 고정 헤더 높이만큼 페이지 컨텐츠 아래로 내림 */
 main {
-  margin-top: 72px; /* Header height */
+  margin-top: 0px; /* Header height */
 }
 
 /* 앱 공통 스타일 */

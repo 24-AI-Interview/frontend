@@ -1,4 +1,3 @@
-// File: src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -13,6 +12,9 @@ import InterviewSessionPage from './pages/Interview/InterviewSessionPage';
 import SelfIntroPage from './pages/SelfIntro/SelfIntroPage';
 import AiSelfIntroPage from './pages/SelfIntro/AiSelfIntroPage';
 
+// 👉 새로 만든 MainPage import
+import MainPage from './pages/MainPage/MainPage';
+
 import './App.css';
 
 function App() {
@@ -24,6 +26,9 @@ function App() {
       {/* 페이지 라우팅 (헤더 높이만큼 패딩) */}
       <main style={{ paddingTop: '72px' }}>
         <Routes>
+          {/* 메인 페이지 */}
+          <Route path="/" element={<MainPage />} />
+
           <Route path="/mypage" element={<BasicInfoPage />} />
           <Route path="/interview-prep" element={<InterviewPrepPage />} />
 
