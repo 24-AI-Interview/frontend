@@ -10,6 +10,9 @@ const Header = () => {
   const isAIInterviewActive =
     pathname.startsWith("/ai-interview") || /^\/interview(\/|$)/.test(pathname);
 
+  const isSelfIntroActive =
+    /^\/selfintro(\/|$)/.test(pathname) || /^\/ai-selfintro(\/|$)/.test(pathname);
+
   const linkClass = ({ isActive }) =>
     `${styles.link} ${isActive ? styles.active : ""}`;
 
@@ -32,10 +35,15 @@ const Header = () => {
           >
             AI 면접
           </NavLink>
-
-          <NavLink to="/selfintro" className={linkClass}>
-            자기소개서 작성
+           
+          <NavLink
+            to="/selfintro"
+            className={`${styles.link} ${isSelfIntroActive ? styles.active : ""}`}
+            aria-current={isSelfIntroActive ? "page" : undefined}
+          >
+            자기소개서 작성/첨삭
           </NavLink>
+
           <NavLink to="/aptitude" className={linkClass}>
             인적성 검사
           </NavLink>
