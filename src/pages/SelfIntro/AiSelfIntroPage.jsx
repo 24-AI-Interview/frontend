@@ -7,8 +7,10 @@ import PageHero from "../../components/Common/PageHero";
 import Button from "../../components/Common/Button";
 import styles from "./AiSelfIntroPage.module.css";
 
+/* 로컬스토리지 키 (SelfIntroPage에서 저장한 자기소개서 데이터와 공유) */
 const STORAGE_KEY = "selfintro:board:v1";
 
+/* 자기소개서 진행 단계 옵션 */
 const STAGES = [
   { id: "draft", label: "작성 중" },
   { id: "screening", label: "서류 전형" },
@@ -17,6 +19,7 @@ const STAGES = [
   { id: "final", label: "최종 전형" },
 ];
 
+/* 모드(입력 방식) 상수 */
 const MODE = {
   INPUT: "input",
   FILE: "file",
@@ -24,23 +27,24 @@ const MODE = {
 };
 
 export default function AiSelfIntroPage() {
-  // 공통 폼
+  /* 공통 폼 상태 */
   const [industry, setIndustry] = useState("");
   const [job, setJob] = useState("");
   const [mode, setMode] = useState(MODE.INPUT);
 
-  // 직접 입력
+  /* 직접 입력 상태 */
   const [text, setText] = useState("");
   const MAX = 2000;
 
-  // 파일 업로드
+  /* 파일 업로드 상태 */
   const [file, setFile] = useState(null);
 
-  // 저장된 자기소개서
+  /* 저장된 자기소개서 상태 */
   const [saved, setSaved] = useState([]);
   const [stageFilter, setStageFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(null);
 
+  /* 페이지 로드 시 로컬스토리지 데이터 불러오기 */
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -50,19 +54,20 @@ export default function AiSelfIntroPage() {
     }
   }, []);
 
+  /* 단계 필터 적용된 저장 데이터 */
   const filteredSaved = useMemo(() => {
     if (stageFilter === "all") return saved;
     return saved.filter((s) => s.stage === stageFilter);
   }, [saved, stageFilter]);
 
+  /* 파일 드래그 앤 드롭 처리 */
   const handleDrop = (e) => {
     e.preventDefault();
     const f = e.dataTransfer.files?.[0];
     if (f) setFile(f);
   };
-
+  /* 첨삭 요청 버튼 클릭 처리 */
   const handleAnalyze = () => {
-    // 실제 API 연동 전 UI 동작만
     if (mode === MODE.INPUT && !text.trim()) {
       alert("자기소개서 내용을 입력해 주세요.");
       return;
@@ -86,7 +91,7 @@ export default function AiSelfIntroPage() {
         maxWidth={1200}
       />
 
-      {/* 폼 바 */}
+      {/* 업종/직무 선택 폼 */}
       <section className={styles.formBar}>
         <div className={styles.select}>
           <label>업무분야</label>
@@ -111,8 +116,10 @@ export default function AiSelfIntroPage() {
         </div>
       </section>
 
-      {/* 모드 카드 */}
+      {/* 모드 선택 버튼 */}
       <section className={styles.modeCards}>
+
+        {/* 직접 입력 모드 */}
         <button
           className={`${styles.modeCard} ${mode === MODE.INPUT ? styles.active : ""}`}
           onClick={() => setMode(MODE.INPUT)}
@@ -121,6 +128,7 @@ export default function AiSelfIntroPage() {
           <span>자기소개서를 직접 붙여넣거나 입력합니다.</span>
         </button>
 
+        {/* 파일 업로드 모드 */}
         <button
           className={`${styles.modeCard} ${mode === MODE.FILE ? styles.active : ""}`}
           onClick={() => setMode(MODE.FILE)}
@@ -129,6 +137,7 @@ export default function AiSelfIntroPage() {
           <span>PDF, DOC, DOCX, HWP 텍스트 파일을 업로드합니다.</span>
         </button>
 
+        {/* 저장된 자기소개서 모드 */}
         <button
           className={`${styles.modeCard} ${mode === MODE.SAVED ? styles.active : ""}`}
           onClick={() => setMode(MODE.SAVED)}
@@ -138,8 +147,10 @@ export default function AiSelfIntroPage() {
         </button>
       </section>
 
-      {/* 컨텐츠 패널 */}
+      {/* 모드별 입력 패널 */}
       <section className={styles.panel}>
+
+        {/* 직접 입력 패널 */}
         {mode === MODE.INPUT && (
           <div className={styles.inputWrap}>
             <textarea
@@ -155,6 +166,7 @@ export default function AiSelfIntroPage() {
           </div>
         )}
 
+        {/* 파일 업로드 패널 */}
         {mode === MODE.FILE && (
           <div
             className={styles.drop}
@@ -188,6 +200,7 @@ export default function AiSelfIntroPage() {
           </div>
         )}
 
+        {/* 저장된 자기소개서 패널 */}
         {mode === MODE.SAVED && (
           <>
             <div className={styles.stageChips}>
@@ -243,6 +256,7 @@ export default function AiSelfIntroPage() {
         )}
       </section>
 
+      {/* 하단 첨삭 요청 버튼 */}
       <div className={styles.footer}>
         <Button className={styles.primaryBtn} onClick={handleAnalyze}>
           자기소개서 첨삭받기

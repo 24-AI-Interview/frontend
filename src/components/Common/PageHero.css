@@ -18,7 +18,7 @@
   border-radius: 50px;
   font-family: "Pretendard Variable", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 20px;
   color: #000;
   border: 1px solid #dbe5f5;
   display: flex;
@@ -30,7 +30,7 @@
 .page-hero__title {
   font-family: "Pretendard Variable", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 44px;
   color: #525966;
   margin-top: 15px;

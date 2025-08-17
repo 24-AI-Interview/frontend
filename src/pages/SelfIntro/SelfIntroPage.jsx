@@ -8,7 +8,7 @@ import PageHero from "../../components/Common/PageHero";
 import Button from "../../components/Common/Button";
 import styles from "./SelfIntroPage.module.css";
 
-/* ===== 단계(STAGES) 정의 ===== */
+/* 단계(STAGES) 정의 */
 const STAGES = [
   { id: "draft", label: "작성 중" },
   { id: "screening", label: "서류 전형" },
@@ -17,14 +17,14 @@ const STAGES = [
   { id: "final", label: "최종 전형" },
 ];
 
-/* ===== 정렬 옵션 ===== */
+/* 정렬 옵션 */
 const SORT_OPTIONS = [
   { id: "latest", label: "최신 순으로 정렬" },
   { id: "oldest", label: "오래된 순으로 정렬" },
   { id: "title", label: "제목순 정렬" },
 ];
 
-/* ===== 기간 필터 옵션 ===== */
+/* 기간 필터 옵션 */
 const PERIOD_OPTIONS = [
   { id: "all", label: "전체 기간" },
   { id: "7", label: "최근 7일" },
@@ -32,21 +32,21 @@ const PERIOD_OPTIONS = [
   { id: "90", label: "최근 90일" },
 ];
 
-/* ===== 로컬스토리지 키 및 시간 헬퍼 ===== */
+/* 로컬스토리지 키 및 시간 헬퍼 */
 const STORAGE_KEY = "selfintro:board:v1";
 const nowISO = () => new Date().toISOString();
 
 export default function SelfIntroPage() {
   const navigate = useNavigate();
 
-  /* --------- 상태 정의 --------- */
-  const [items, setItems] = useState([]); // 자소서 리스트
-  const [search, setSearch] = useState(""); // 검색어
-  const [sort, setSort] = useState(SORT_OPTIONS[0].id); // 정렬 기준
-  const [period, setPeriod] = useState(PERIOD_OPTIONS[0].id); // 기간 필터
-  const [editing, setEditing] = useState(null); // 현재 편집 중인 자소서
+  /* 상태 정의 */
+  const [items, setItems] = useState([]); 
+  const [search, setSearch] = useState(""); 
+  const [sort, setSort] = useState(SORT_OPTIONS[0].id); 
+  const [period, setPeriod] = useState(PERIOD_OPTIONS[0].id); 
+  const [editing, setEditing] = useState(null); 
 
-  /* --------- 로컬스토리지에서 데이터 불러오기 --------- */
+  /* 로컬스토리지에서 데이터 불러오기 */
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -70,12 +70,12 @@ export default function SelfIntroPage() {
     }
   }, []);
 
-  /* --------- 데이터 변경 시 로컬스토리지 저장 --------- */
+  /* 데이터 변경 시 로컬스토리지 저장 */
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
-  /* --------- 검색, 기간, 정렬 필터링 --------- */
+  /* 검색, 기간, 정렬 필터링 */
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
     let arr = items.filter((it) => {
@@ -110,7 +110,7 @@ export default function SelfIntroPage() {
     return arr;
   }, [items, search, sort, period]);
 
-  /* --------- 단계별 데이터 그룹화 --------- */
+  /* 단계별 데이터 그룹화 */
   const byStage = useMemo(() => {
     const map = Object.fromEntries(STAGES.map((s) => [s.id, []]));
     filtered.forEach((it) => {
@@ -120,7 +120,7 @@ export default function SelfIntroPage() {
     return map;
   }, [filtered]);
 
-  /* --------- 액션 핸들러 --------- */
+  /* 액션 핸들러 */
   const handleCreate = (stageId) => {
     /* 새 자소서 생성 */
     const newItem = {
@@ -168,7 +168,7 @@ export default function SelfIntroPage() {
     navigate("/ai-selfintro");
   };
 
-  /* --------- 렌더링 --------- */
+  /* 렌더링 */
   return (
     <div className={styles.page}>
       {/* 페이지 상단 히어로 영역 */}
@@ -300,7 +300,7 @@ export default function SelfIntroPage() {
   );
 }
 
-/* ----------------- 편집 모달 컴포넌트 ----------------- */
+/* 편집 모달 컴포넌트 */
 function EditModal({ data, onClose, onSave, onDelete }) {
   const [title, setTitle] = useState(data.title || "");
   const [company, setCompany] = useState(data.company || "");
