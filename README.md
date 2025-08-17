@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# AI Interview Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**AI 면접 준비를 위한 통합 플랫폼**의 프론트엔드 레포지토리입니다. 
+React를 기반으로 사용자 친화적인 UI/UX를 구현하며, 자기소개서 작성부터 AI 면접 시뮬레이션까지 면접 준비의 모든 과정을 지원합니다.
 
-## Available Scripts
+-----
 
-In the project directory, you can run:
+## 주요 기능
 
-### `npm start`
+### 1. 메인 페이지
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  - **UX/UI 리디자인**: 직관적인 히어로 섹션, 자기소개서, 인적성 섹션으로 구성된 새로운 레이아웃
+  - **반응형 디자인**: 다양한 기기 환경에서 최적화된 경험 제공
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 2. 자기소개서 (Self-Intro)
 
-### `npm test`
+  - **보드형 관리 페이지**: 5열 레이아웃으로 자기소개서를 한눈에 관리하고, 검색, 정렬, 기간 필터링 기능 제공
+  - **AI 첨삭 페이지**: 직접 입력, 파일 업로드, 저장된 자기소개서 불러오기 등 다양한 방법으로 첨삭을 요청
+  - **고도화된 기능**: 업종·직무 선택, 단계별 필터링, 글자 수 카운트, 경고 메시지 등
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. 마이페이지 (MyPage)
 
-### `npm run build`
+  - **개인 정보 관리**: ID, 이름, 닉네임 수정 및 중복 확인 기능
+  - **스펙 관리**: 학력, 자격증, 경력, 기술 스택을 체계적으로 입력 및 저장
+  - **내 활동 기록**: 작성한 자기소개서, 스크랩한 채용 정보, 면접 기록을 한곳에서 확인
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 4. 면접 준비 (Interview Prep)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  - **질문 가이드**: 예상 질문 리스트와 관련 가이드 영상을 제공
+  - **개인화**: 관심 있는 질문을 즐겨찾기하거나 카테고리별로 필터링하는 기능 구현 예정
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 5. AI 면접 (Interview Session)
 
-### `npm run eject`
+  - **사전 점검 (Precheck)**: 카메라 및 마이크 권한 요청, 환경 체크
+  - **실시간 세션**: 타이머, 질문 카테고리 선택 기능
+  - **시선 분석 기능**: 눈, 코, 입 기준점을 오버레이하는 얼굴 마스크와 시선 가이드라인을 제공하여 실제 면접 환경을 재현
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+-----
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📂 폴더 구조
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+src/
+├── components/          # 재사용 가능한 컴포넌트
+│    └── Common/         # 공통 컴포넌트 (Header, Button 등)
+├── pages/               # 각 페이지 컴포넌트
+│    ├── MainPage/
+│    ├── MyPage/
+│    ├── SelfIntro/
+│    ├── InterviewPrep/
+│    └── Interview/
+├── styles/              # 전역 스타일
+└── App.js               # 애플리케이션의 메인 라우터
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+-----
 
-## Learn More
+## 시작하는 방법
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+프로젝트를 로컬 환경에서 실행하려면 아래 단계를 따라 주세요.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1.  **레포지토리 클론**:
+    ```bash
+    git clone https://github.com/24-AI-Interview/frontend.git
+    cd frontend
+    ```
+2.  **의존성 설치**:
+    ```bash
+    npm install
+    ```
+3.  **애플리케이션 실행**:
+    ```bash
+    npm start
+    ```
+    이 명령어를 실행하면 `localhost:3000`에서 개발 서버가 시작됩니다.
 
-### Code Splitting
+-----
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🤝 기여 방법
 
-### Analyzing the Bundle Size
+1.  **이슈 등록**: 해결하고자 하는 문제나 추가하고 싶은 기능에 대해 이슈를 먼저 생성합니다.
+2.  **브랜치 생성**: `feat/기능-설명`, `fix/버그-설명`, `refactor/리팩토링-내용`과 같은 네이밍 규칙을 사용하여 작업 브랜치를 생성합니다.
+3.  **코드 작성 및 PR**: 작업 완료 후, `main` 브랜치로 Pull Request를 보냅니다.
+4.  **코드 리뷰**: 팀원들의 코드 리뷰를 거친 후 `main` 브랜치에 병합됩니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**참고**: `main` 브랜치에 직접 커밋하는 것은 금지되어 있으며, 모든 변경 사항은 PR을 통해 병합됩니다.
