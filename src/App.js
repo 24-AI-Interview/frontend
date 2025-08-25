@@ -12,6 +12,8 @@ import InterviewSessionPage from './pages/Interview/InterviewSessionPage';
 import SelfIntroPage from './pages/SelfIntro/SelfIntroPage';
 import AiSelfIntroPage from './pages/SelfIntro/AiSelfIntroPage';
 
+import AptitudeTestPage from './pages/AptitudeTest/AptitudeTestPage';
+
 // 👉 새로 만든 MainPage import
 import MainPage from './pages/MainPage/MainPage';
 
@@ -31,6 +33,7 @@ function App() {
 
           <Route path="/mypage" element={<BasicInfoPage />} />
           <Route path="/interview-prep" element={<InterviewPrepPage />} />
+    
 
           {/* 기존 페이지들도 필요시 유지 */}
           <Route path="/ai-interview" element={<CategorySelect />} />
@@ -38,6 +41,8 @@ function App() {
           <Route path="/interview/session" element={<InterviewSessionPage />} />
           <Route path="/selfintro" element={<SelfIntroPage />} />
           <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
+          <Route path="/aptitude" element={<AptitudeTestPage />} />
+
         </Routes>
       </main>
     </Router>
