@@ -6,10 +6,6 @@ const Header = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // AI 면접 활성 조건
-  const isAIInterviewActive =
-    pathname.startsWith("/ai-interview") || /^\/interview(\/|$)/.test(pathname);
-
   const isSelfIntroActive =
     /^\/selfintro(\/|$)/.test(pathname) || /^\/ai-selfintro(\/|$)/.test(pathname);
 
@@ -24,18 +20,10 @@ const Header = () => {
       <nav className={styles.nav}>
         {/* 좌측 메뉴 */}
         <div className={styles.menu}>
-          <NavLink to="/interview-prep" className={linkClass}>
+          <NavLink to="/ai-interview" className={linkClass}>
             면접 연습
           </NavLink>
 
-          <NavLink
-            to="/ai-interview"
-            className={`${styles.link} ${isAIInterviewActive ? styles.active : ""}`}
-            aria-current={isAIInterviewActive ? "page" : undefined}
-          >
-            AI 면접
-          </NavLink>
-           
           <NavLink
             to="/selfintro"
             className={`${styles.link} ${isSelfIntroActive ? styles.active : ""}`}

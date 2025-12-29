@@ -1,13 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from './components/Common/Header';
 import BasicInfoPage from './pages/MyPage/BasicInfoPage';
-import InterviewPrepPage from './pages/InterviewPrep/InterviewPrepPage';
-
-import CategorySelect from './pages/Interview/CategorySelect';
-import Precheck from './pages/Interview/Precheck';
-import InterviewSessionPage from './pages/Interview/InterviewSessionPage';
+import InterviewFlowPage from './pages/Interview/InterviewFlowPage';
 
 import SelfIntroPage from './pages/SelfIntro/SelfIntroPage';
 import AiSelfIntroPage from './pages/SelfIntro/AiSelfIntroPage';
@@ -32,13 +28,13 @@ function App() {
           <Route path="/" element={<MainPage />} />
 
           <Route path="/mypage" element={<BasicInfoPage />} />
-          <Route path="/interview-prep" element={<InterviewPrepPage />} />
+          <Route path="/interview-prep" element={<Navigate to="/ai-interview" replace />} />
     
 
           {/* 기존 페이지들도 필요시 유지 */}
-          <Route path="/ai-interview" element={<CategorySelect />} />
-          <Route path="/interview/precheck" element={<Precheck />} />
-          <Route path="/interview/session" element={<InterviewSessionPage />} />
+          <Route path="/ai-interview" element={<InterviewFlowPage />} />
+          <Route path="/interview/precheck" element={<Navigate to="/ai-interview" replace />} />
+          <Route path="/interview/session" element={<Navigate to="/ai-interview" replace />} />
           <Route path="/selfintro" element={<SelfIntroPage />} />
           <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
           <Route path="/aptitude" element={<AptitudeTestPage />} />

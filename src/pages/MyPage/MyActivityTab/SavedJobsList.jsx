@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MyActivityTab.module.css";
 import Button from "../../../components/Common/Button";
+import { fetchSavedJobs } from "../../../api/jobs";
 
 export default function SavedJobsList() {
   const userId = "user_abc";
@@ -14,9 +15,7 @@ export default function SavedJobsList() {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/jobs/saved?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) throw new Error("스크랩 채용 목록 조회 실패");
-        const data = await res.json();
+        const data = await fetchSavedJobs({ userId });
         if (!ignore) setItems(data || []);
       } catch (e) {
         setErr("데이터를 불러오지 못했습니다. 다시 시도해주세요.");

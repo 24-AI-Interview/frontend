@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MyActivityTab.module.css";
 import Button from "../../../components/Common/Button";
+import { fetchMySelfIntroSummaries } from "../../../api/mypage";
 
 export default function ResumeList() {
   const userId = "user_abc"; // TODO: 실제 로그인 사용자로 대체
@@ -15,9 +16,7 @@ export default function ResumeList() {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/resumes?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) throw new Error("자기소개서 목록 조회 실패");
-        const data = await res.json();
+        const data = await fetchMySelfIntroSummaries({ userId });
         if (!ignore) setItems(data || []);
       } catch (e) {
         setErr("데이터를 불러오지 못했습니다. 다시 시도해주세요.");
