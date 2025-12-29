@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MyActivityTab.module.css";
 import Button from "../../../components/Common/Button";
+import { fetchInterviewHistory } from "../../../api/interview";
 
 export default function InterviewHistory() {
   const userId = "user_abc";
@@ -14,9 +15,7 @@ export default function InterviewHistory() {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/interviews?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) throw new Error("면접 이력 조회 실패");
-        const data = await res.json();
+        const data = await fetchInterviewHistory({ userId });
         if (!ignore) setItems(data || []);
       } catch (e) {
         setErr("면접 이력을 불러오는 데 실패했습니다. 다시 시도해주세요.");

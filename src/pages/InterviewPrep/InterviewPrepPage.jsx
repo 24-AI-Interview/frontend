@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import styles from "./InterviewPrepPage.module.css";
 import PageHero from "../../components/Common/PageHero";
 import CategoryPanelInline from "./CategoryPanelInline"; // 경량 패널만 사용
+import { fetchPrepQuestions } from "../../api/prep";
 
 const VIDEOS = [
   { id: "F5sxMs0X-LI", title: "삼성전자 합격 - 1분 자기소개 (Shorts)", ratio: "16/9" },
@@ -121,10 +122,7 @@ function QuestionList({ job, level }) {
     try {
       setErr("");
       setItems(null);
-      const qs = new URLSearchParams({ job, ...(level ? { level } : {}) });
-      const res = await fetch(`/api/questions?${qs.toString()}`);
-      if (!res.ok) throw new Error("fail");
-      const data = await res.json();
+      const data = await fetchPrepQuestions({ job, level });
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
       setErr("질문을 불러오는 데 실패했습니다. 네트워크 상태를 확인해주세요.");

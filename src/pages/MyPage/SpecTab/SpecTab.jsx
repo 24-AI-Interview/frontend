@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./SpecTab.module.css";
 import Button from "../../../components/Common/Button";
+import { fetchMyProfile, saveMyProfile } from "../../../api/mypage";
 
 import EducationSection from "./EducationSection";
 import CertificateList from "./CertificateList";
@@ -29,9 +30,7 @@ export default function SpecTab() {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/profile?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) throw new Error("조회 실패");
-        const data = await res.json();
+        const data = await fetchMyProfile({ userId });
         if (ignore) return;
         setForm({
           education: data.education ?? form.education,
@@ -108,12 +107,7 @@ export default function SpecTab() {
         experience: form.experience.filter(e => e.company || e.role || e.period || e.description),
         skills: form.skills,
       };
-      const res = await fetch("/api/profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("저장 실패");
+      await saveMyProfile(payload);
       window.alert("이력 정보가 저장되었습니다");
     } catch (e) {
       console.error(e);

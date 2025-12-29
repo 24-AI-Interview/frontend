@@ -6,9 +6,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PageHero from "../../components/Common/PageHero";
 import Button from "../../components/Common/Button";
 import styles from "./AiSelfIntroPage.module.css";
-
-/* 로컬스토리지 키 (SelfIntroPage에서 저장한 자기소개서 데이터와 공유) */
-const STORAGE_KEY = "selfintro:board:v1";
+import { fetchSelfIntros } from "../../api/selfintro";
 
 /* 자기소개서 진행 단계 옵션 */
 const STAGES = [
@@ -43,15 +41,22 @@ export default function AiSelfIntroPage() {
   const [saved, setSaved] = useState([]);
   const [stageFilter, setStageFilter] = useState("all");
   const [selectedId, setSelectedId] = useState(null);
+  const [savedError, setSavedError] = useState("");
 
-  /* 페이지 로드 시 로컬스토리지 데이터 불러오기 */
+  /* 페이지 로드 시 API 데이터 불러오기 */
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setSaved(JSON.parse(raw));
-    } catch (e) {
-      console.error(e);
-    }
+    let ignore = false;
+    (async () => {
+      try {
+        const data = await fetchSelfIntros();
+        if (!ignore) setSaved(Array.isArray(data) ? data : []);
+      } catch (e) {
+        if (!ignore) setSavedError("저장된 자기소개서를 불러오지 못했습니다.");
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   /* 단계 필터 적용된 저장 데이터 */
@@ -222,7 +227,9 @@ export default function AiSelfIntroPage() {
             </div>
 
             <div className={styles.savedList}>
-              {filteredSaved.length === 0 ? (
+              {savedError ? (
+                <div className={styles.emptySaved}>{savedError}</div>
+              ) : filteredSaved.length === 0 ? (
                 <div className={styles.emptySaved}>
                   해당 단계의 저장된 자기소개서가 없습니다.
                 </div>

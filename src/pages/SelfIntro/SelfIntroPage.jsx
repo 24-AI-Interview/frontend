@@ -7,6 +7,13 @@ import { useNavigate } from "react-router-dom";
 import PageHero from "../../components/Common/PageHero";
 import Button from "../../components/Common/Button";
 import styles from "./SelfIntroPage.module.css";
+import {
+  createSelfIntro,
+  deleteSelfIntro,
+  fetchSelfIntroDetail,
+  fetchSelfIntros,
+  updateSelfIntro,
+} from "../../api/selfintro";
 
 /* 단계(STAGES) 정의 */
 const STAGES = [
@@ -32,8 +39,6 @@ const PERIOD_OPTIONS = [
   { id: "90", label: "최근 90일" },
 ];
 
-/* 로컬스토리지 키 및 시간 헬퍼 */
-const STORAGE_KEY = "selfintro:board:v1";
 const nowISO = () => new Date().toISOString();
 
 export default function SelfIntroPage() {
@@ -45,35 +50,28 @@ export default function SelfIntroPage() {
   const [sort, setSort] = useState(SORT_OPTIONS[0].id); 
   const [period, setPeriod] = useState(PERIOD_OPTIONS[0].id); 
   const [editing, setEditing] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  /* 로컬스토리지에서 데이터 불러오기 */
+  /* API에서 데이터 불러오기 */
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        setItems(JSON.parse(raw));
-      } else {
-        // 최초 접속 시 샘플 데이터 생성
-        setItems([
-          {
-            id: crypto.randomUUID?.() ?? `id-${Date.now()}`,
-            title: "새 자기소개서",
-            company: "",
-            stage: "draft",
-            updatedAt: nowISO(),
-            body: "",
-          },
-        ]);
+    let ignore = false;
+    (async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const data = await fetchSelfIntros();
+        if (!ignore) setItems(Array.isArray(data) ? data : []);
+      } catch (e) {
+        if (!ignore) setError("자기소개서 목록을 불러오는 데 실패했습니다.");
+      } finally {
+        if (!ignore) setLoading(false);
       }
-    } catch (e) {
-      console.error(e);
-    }
+    })();
+    return () => {
+      ignore = true;
+    };
   }, []);
-
-  /* 데이터 변경 시 로컬스토리지 저장 */
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
 
   /* 검색, 기간, 정렬 필터링 */
   const filtered = useMemo(() => {
@@ -122,45 +120,72 @@ export default function SelfIntroPage() {
 
   /* 액션 핸들러 */
   const handleCreate = (stageId) => {
-    /* 새 자소서 생성 */
-    const newItem = {
-      id: crypto.randomUUID?.() ?? `id-${Date.now()}`,
-      title: "새 자기소개서",
-      company: "",
-      stage: stageId,
-      updatedAt: nowISO(),
-      body: "",
-    };
-    setItems((prev) => [newItem, ...prev]);
-    setEditing(newItem);
+    (async () => {
+      try {
+        const newItem = await createSelfIntro({
+          title: "새 자기소개서",
+          company: "",
+          stage: stageId,
+          updatedAt: nowISO(),
+          body: "",
+        });
+        setItems((prev) => [newItem, ...prev]);
+        setEditing(newItem);
+      } catch (e) {
+        alert("자기소개서를 생성하지 못했습니다.");
+      }
+    })();
   };
 
-  const handleEditOpen = (item) => setEditing(item); // 편집 열기
+  const handleEditOpen = (item) => {
+    (async () => {
+      try {
+        const detail = await fetchSelfIntroDetail(item.id);
+        setEditing(detail);
+      } catch (e) {
+        alert("상세 정보를 불러오는 데 실패했습니다.");
+      }
+    })();
+  };
 
   const handleDelete = (id) => {
     // 삭제
     if (!window.confirm("삭제하시겠어요?")) return;
-    setItems((prev) => prev.filter((i) => i.id !== id));
-    setEditing(null);
+    (async () => {
+      try {
+        await deleteSelfIntro(id);
+        setItems((prev) => prev.filter((i) => i.id !== id));
+        setEditing(null);
+      } catch (e) {
+        alert("삭제에 실패했습니다. 다시 시도해주세요.");
+      }
+    })();
   };
 
   const handleMove = (id, nextStage) => {
-    // 단계 이동
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === id ? { ...i, stage: nextStage, updatedAt: nowISO() } : i
-      )
-    );
+    (async () => {
+      try {
+        const updated = await updateSelfIntro(id, {
+          stage: nextStage,
+          updatedAt: nowISO(),
+        });
+        setItems((prev) => prev.map((i) => (i.id === id ? updated : i)));
+      } catch (e) {
+        alert("단계 이동에 실패했습니다.");
+      }
+    })();
   };
 
   const handleSaveModal = (payload) => {
-    // 편집 저장
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === payload.id ? { ...i, ...payload, updatedAt: nowISO() } : i
-      )
-    );
-    setEditing(null);
+    (async () => {
+      try {
+        const updated = await updateSelfIntro(payload.id, payload);
+        setItems((prev) => prev.map((i) => (i.id === payload.id ? updated : i)));
+        setEditing(null);
+      } catch (e) {
+        alert("저장에 실패했습니다. 다시 시도해주세요.");
+      }
+    })();
   };
 
   const goAiSelfIntro = () => {
@@ -168,7 +193,14 @@ export default function SelfIntroPage() {
     navigate("/ai-selfintro");
   };
 
-  /* 렌더링 */
+  if (loading) {
+    return <div className={styles.page}>불러오는 중...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.page}>{error}</div>;
+  }
+
   return (
     <div className={styles.page}>
       {/* 페이지 상단 히어로 영역 */}
