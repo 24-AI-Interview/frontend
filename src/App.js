@@ -12,35 +12,39 @@ import AptitudeTestPage from './pages/AptitudeTest/AptitudeTestPage';
 
 // 👉 새로 만든 MainPage import
 import MainPage from './pages/MainPage/MainPage';
+import LoginPage from './pages/Auth/LoginPage';
+import SignupPage from './pages/Auth/SignupPage';
+import { AuthProvider } from './auth/AuthContext';
 
 import './App.css';
 
 function App() {
   return (
     <Router>
-      {/* 상단 공통 헤더 */}
-      <Header />
+      <AuthProvider>
+        {/* 상단 공통 헤더 */}
+        <Header />
 
-      {/* 페이지 라우팅 (헤더 높이만큼 패딩) */}
-      <main style={{ paddingTop: '72px' }}>
-        <Routes>
-          {/* 메인 페이지 */}
+        {/* 페이지 라우팅 (헤더 높이만큼 패딩) */}
+        <main style={{ paddingTop: '72px' }}>
+          <Routes>
+            {/* 메인 페이지 */}
           <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
 
-          <Route path="/mypage" element={<BasicInfoPage />} />
-          <Route path="/interview-prep" element={<Navigate to="/ai-interview" replace />} />
-    
+            <Route path="/mypage" element={<BasicInfoPage />} />
+            <Route path="/interview-prep" element={<Navigate to="/ai-interview" replace />} />
+            <Route path="/ai-interview" element={<InterviewFlowPage />} />
+            <Route path="/interview/precheck" element={<Navigate to="/ai-interview" replace />} />
+            <Route path="/interview/session" element={<Navigate to="/ai-interview" replace />} />
+            <Route path="/selfintro" element={<SelfIntroPage />} />
+            <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
+            <Route path="/aptitude" element={<AptitudeTestPage />} />
 
-          {/* 기존 페이지들도 필요시 유지 */}
-          <Route path="/ai-interview" element={<InterviewFlowPage />} />
-          <Route path="/interview/precheck" element={<Navigate to="/ai-interview" replace />} />
-          <Route path="/interview/session" element={<Navigate to="/ai-interview" replace />} />
-          <Route path="/selfintro" element={<SelfIntroPage />} />
-          <Route path="/ai-selfintro" element={<AiSelfIntroPage />} />
-          <Route path="/aptitude" element={<AptitudeTestPage />} />
-
-        </Routes>
-      </main>
+          </Routes>
+        </main>
+      </AuthProvider>
     </Router>
   );
 }

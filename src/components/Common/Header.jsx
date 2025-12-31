@@ -1,19 +1,18 @@
 import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
+import { useAuth } from "../../auth/AuthContext";
 
 const Header = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
 
   const isSelfIntroActive =
     /^\/selfintro(\/|$)/.test(pathname) || /^\/ai-selfintro(\/|$)/.test(pathname);
 
   const linkClass = ({ isActive }) =>
     `${styles.link} ${isActive ? styles.active : ""}`;
-
-  // 메인(/)에서는 '회원가입 / 로그인', 그 외에는 '홈으로 / 로그아웃'
-  const isHome = pathname === "/";
 
   return (
     <header className={styles.header}>
@@ -42,21 +41,19 @@ const Header = () => {
 
         {/* 우측 버튼 */}
         <div className={styles.buttons}>
-          {isHome ? (
+          {!isAuthenticated ? (
             <>
               <button
                 type="button"
                 className={`${styles.btn} ${styles.home}`}
-                // TODO: 회원가입 페이지 라우트 연결 시 교체
-                onClick={() => alert("회원가입 페이지로 연결해주세요.")}
+                onClick={() => navigate("/signup")}
               >
                 회원가입
               </button>
               <button
                 type="button"
                 className={`${styles.btn} ${styles.logout}`}
-                // TODO: 로그인 페이지 라우트 연결 시 교체
-                onClick={() => alert("로그인 페이지로 연결해주세요.")}
+                onClick={() => navigate("/login")}
               >
                 로그인
               </button>
@@ -73,7 +70,10 @@ const Header = () => {
               <button
                 type="button"
                 className={`${styles.btn} ${styles.logout}`}
-                onClick={() => alert("로그아웃 로직을 연결해주세요.")}
+                onClick={async () => {
+                  await logout();
+                  navigate("/");
+                }}
               >
                 로그아웃
               </button>
