@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./MainPage.module.css";
 
 /* ===== Hero ===== */
 const Hero = () => (
-  <section className={styles.hero}>
+  <section className={`${styles.sectionBase} ${styles.heroSection}`}>
     {/* 은은한 버블/그리드 */}
     <div className={styles.heroDecor} aria-hidden>
       <span className={`${styles.blob} ${styles.blob1}`} />
@@ -37,18 +37,18 @@ const Hero = () => (
 
 /* ===== Pain Cards ===== */
 const PainCards = () => (
-  <section className={styles.pain}>
+  <section className={`${styles.sectionBase} ${styles.problemSection}`}>
     <div className={styles.sectionHead}>
       <h2>
-        실제로 많은 사람들이 <span className={styles.accent}>(서비스)</span>로{" "}
+        실제로 많은 사람들이 <span className={styles.accent}>스펙타클</span>로{" "}
         <span className={styles.accent}>연습</span>하고 있어요.
       </h2>
       <p>면접 준비에서 자기 경험을 효과적으로 표현하는 방법을 몰라 어려움을 겪고 있어요.</p>
     </div>
 
     <div className={styles.cardGrid3}>
-      <article className={`${styles.card} ${styles.cardBlueLight}`}>
-        <div className={styles.cardAvatar}>
+      <article className={`${styles.problemCard} ${styles.surfaceLight}`}>
+        <div className={styles.cardMedia}>
           <img src="/assets/boom.png" alt="" />
         </div>
         <h3>제가 했던 프로젝트가 자세히<br></br>기억이 안 나요.</h3>
@@ -57,16 +57,16 @@ const PainCards = () => (
         </p>
       </article>
 
-      <article className={`${styles.card} ${styles.cardGrey}`}>
-        <div className={styles.cardAvatar}>
+      <article className={`${styles.problemCard} ${styles.surfaceMuted}`}>
+        <div className={styles.cardMedia}>
           <img src="/assets/question.png" alt="" />
         </div>
         <h3>면접에서 무엇을 물어볼지<br></br>감이 잘 안와요.</h3>
         <p>어떤 경험과 활동을 중요하게 볼지 알기 어렵고, 준비해야 할 질문이 많아 보여 막막해요.</p>
       </article>
 
-      <article className={`${styles.card} ${styles.cardBlue}`}>
-        <div className={styles.cardAvatar}>
+      <article className={`${styles.problemCard} ${styles.surfaceAlt}`}>
+        <div className={styles.cardMedia}>
           <img src="/assets/sad.png" alt="" />
         </div>
         <h3>면접관 앞에만 서면<br></br>긴장해서 말을 잘 못해요.</h3>
@@ -78,7 +78,7 @@ const PainCards = () => (
 
 /* ===== Self Intro (개선 버전) ===== */
 const SelfIntro = () => (
-  <section className={styles.selfintro}>
+  <section className={`${styles.sectionBase} ${styles.resumeSection}`}>
     <div className={styles.selfIntroInner}>
       <div className={styles.selfIntroCopy}>
         <h2>자기소개서</h2>
@@ -124,7 +124,7 @@ const SelfIntro = () => (
 
 /* ===== Aptitude ===== */
 const Aptitude = () => (
-  <section className={styles.aptitude}>
+  <section className={`${styles.sectionBase} ${styles.assessmentSection}`}>
     <div className={styles.aptitudeInner}>
       <div className={styles.logoGrid}>
         {["samsung", "sk", "cj", "kt"].map((brand) => (
@@ -170,7 +170,7 @@ const Aptitude = () => (
 
 /* ===== AI Blocks ===== */
 const AiBlocks = () => (
-  <section className={styles.ai}>
+  <section className={`${styles.sectionBase} ${styles.aiInterviewSection}`}>
     <div className={styles.sectionHeadCenter}>
       <h2>
         AI 분석으로 완성하는 <span className={styles.accent}>실전 면접 연습</span>
@@ -206,6 +206,32 @@ const Footer = () => (
 );
 
 export default function MainPage() {
+  useEffect(() => {
+    const selector = `.${styles.sectionBase}`;
+    const sections = document.querySelectorAll(selector);
+
+    if (!("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add(styles.sectionVisible));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.sectionVisible);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className={styles.page}>
       <main>

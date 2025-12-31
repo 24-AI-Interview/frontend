@@ -88,7 +88,107 @@ const interviewQuestions = [
   "지원 직무에서 가장 중요하다고 생각하는 역량은 무엇인가요?",
 ];
 
+let authUsers = [
+  {
+    id: "usr_123",
+    name: "홍길동",
+    email: "user@example.com",
+    password: "password123",
+    phone: "010-0000-0000",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+const createTokenSet = () => ({
+  accessToken: `mock-access-${Date.now()}`,
+  refreshToken: `mock-refresh-${Date.now()}`,
+  expiresIn: 3600,
+});
+
 export const handlers = [
+  http.post("/api/auth/signup", async ({ request }) => {
+    const body = await request.json().catch(() => ({}));
+    if (!body.email || !body.password || !body.name) {
+      return HttpResponse.json({ message: "invalid input" }, { status: 400 });
+    }
+    const exists = authUsers.find((u) => u.email === body.email);
+    if (exists) {
+      return HttpResponse.json({ message: "email exists" }, { status: 409 });
+    }
+    const user = {
+      id: `usr_${Date.now()}`,
+      name: body.name,
+      email: body.email,
+      password: body.password,
+      phone: body.phone || "",
+      createdAt: new Date().toISOString(),
+    };
+    authUsers = [user, ...authUsers];
+    return HttpResponse.json(
+      {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          createdAt: user.createdAt,
+        },
+        tokens: createTokenSet(),
+      },
+      { status: 201 }
+    );
+  }),
+
+  http.post("/api/auth/login", async ({ request }) => {
+    const body = await request.json().catch(() => ({}));
+    const user = authUsers.find((u) => u.email === body.email);
+    if (!user || user.password !== body.password) {
+      return HttpResponse.json({ message: "invalid credentials" }, { status: 401 });
+    }
+    return HttpResponse.json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        lastLoginAt: new Date().toISOString(),
+      },
+      tokens: createTokenSet(),
+    });
+  }),
+
+  http.post("/api/auth/logout", async ({ request }) => {
+    const body = await request.json().catch(() => ({}));
+    if (!body.refreshToken) {
+      return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
+    }
+    return new HttpResponse(null, { status: 204 });
+  }),
+
+  http.post("/api/auth/refresh", async ({ request }) => {
+    const body = await request.json().catch(() => ({}));
+    if (!body.refreshToken) {
+      return HttpResponse.json({ message: "invalid refresh token" }, { status: 401 });
+    }
+    return HttpResponse.json({
+      accessToken: `mock-access-${Date.now()}`,
+      expiresIn: 3600,
+    });
+  }),
+
+  http.get("/api/auth/me", ({ request }) => {
+    const auth = request.headers.get("authorization") || "";
+    if (!auth.startsWith("Bearer ")) {
+      return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
+    }
+    const user = authUsers[0];
+    return HttpResponse.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      createdAt: user.createdAt,
+    });
+  }),
   http.get("/api/prep/videos", () => {
     return HttpResponse.json(prepVideos);
   }),
