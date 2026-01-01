@@ -1,12 +1,14 @@
 // File: src/pages/MyPage/BasicInfoPage.jsx
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./BasicInfoPage.module.css";
 import Button from "../../components/Common/Button";
 import PageLayout from "../../layouts/PageLayout";
 import SpecTab from "./SpecTab/SpecTab";
 import MyActivityTab from "./MyActivityTab/MyActivityTab";
+import { useAuth } from "../../auth/AuthContext";
 
 export default function BasicInfoPage() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("기본정보");
   const [userInfo, setUserInfo] = useState({
     nickname: "",
@@ -14,6 +16,13 @@ export default function BasicInfoPage() {
     phoneNumber: "",
     interest: "",
   });
+  const displayUser = useMemo(
+    () => ({
+      email: user?.email || "-",
+      name: user?.name || "-",
+    }),
+    [user]
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,15 +70,13 @@ export default function BasicInfoPage() {
               <>
                 <div className={styles["basic-info__row"]}>
                   <label className={styles["basic-info__label"]}>아이디</label>
-                  <span className={styles["basic-info__value"]}>
-                    ktyjj0306@naver.com
-                  </span>
+                  <span className={styles["basic-info__value"]}>{displayUser.email}</span>
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 
                 <div className={styles["basic-info__row"]}>
                   <label className={styles["basic-info__label"]}>이름</label>
-                  <span className={styles["basic-info__value"]}>예인</span>
+                  <span className={styles["basic-info__value"]}>{displayUser.name}</span>
                 </div>
                 <hr className={styles["basic-info__separator"]} />
 

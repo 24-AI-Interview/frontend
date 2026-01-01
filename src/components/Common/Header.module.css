@@ -27,6 +27,18 @@
   gap: 40px;
 }
 
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.logoImg {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
 /* 링크 기본/활성 상태 */
 .link {
   font-family: "Pretendard Variable", sans-serif;

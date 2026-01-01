@@ -1,16 +1,21 @@
-import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 export default function ProtectedRoute() {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const hasPromptedRef = useRef(false);
 
-  if (loading) return null;
+  useEffect(() => {
+    if (loading || isAuthenticated || hasPromptedRef.current) return;
+    hasPromptedRef.current = true;
+    window.alert("로그인이 필요합니다.");
+    navigate("/login", { replace: true, state: { from: location } });
+  }, [isAuthenticated, loading, location, navigate]);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
-  }
+  if (loading || !isAuthenticated) return null;
 
   return <Outlet />;
 }
