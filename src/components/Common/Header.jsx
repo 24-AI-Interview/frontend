@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import { useAuth } from "../../auth/AuthContext";
+import spectrumLogo from "../../assets/spectrum_logo.png";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -19,6 +20,9 @@ const Header = () => {
       <nav className={styles.nav}>
         {/* 좌측 메뉴 */}
         <div className={styles.menu}>
+          <NavLink to="/" className={styles.logoLink} aria-label="홈">
+            <img src={spectrumLogo} alt="Spectrum" className={styles.logoImg} />
+          </NavLink>
           <NavLink to="/ai-interview" className={linkClass}>
             면접 연습
           </NavLink>

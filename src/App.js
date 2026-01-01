@@ -15,6 +15,7 @@ import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import { AuthProvider } from './auth/AuthContext';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 import './App.css';
 
@@ -33,7 +34,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
 
-            <Route path="/mypage" element={<BasicInfoPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/mypage" element={<BasicInfoPage />} />
+            </Route>
             <Route path="/interview-prep" element={<Navigate to="/ai-interview" replace />} />
             <Route path="/ai-interview" element={<InterviewFlowPage />} />
             <Route path="/interview/precheck" element={<Navigate to="/ai-interview" replace />} />

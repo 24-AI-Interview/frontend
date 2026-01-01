@@ -105,90 +105,101 @@ const createTokenSet = () => ({
   expiresIn: 3600,
 });
 
-export const handlers = [
-  http.post("/api/auth/signup", async ({ request }) => {
-    const body = await request.json().catch(() => ({}));
-    if (!body.email || !body.password || !body.name) {
-      return HttpResponse.json({ message: "invalid input" }, { status: 400 });
-    }
-    const exists = authUsers.find((u) => u.email === body.email);
-    if (exists) {
-      return HttpResponse.json({ message: "email exists" }, { status: 409 });
-    }
-    const user = {
-      id: `usr_${Date.now()}`,
-      name: body.name,
-      email: body.email,
-      password: body.password,
-      phone: body.phone || "",
-      createdAt: new Date().toISOString(),
-    };
-    authUsers = [user, ...authUsers];
-    return HttpResponse.json(
-      {
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          createdAt: user.createdAt,
-        },
-        tokens: createTokenSet(),
-      },
-      { status: 201 }
-    );
-  }),
-
-  http.post("/api/auth/login", async ({ request }) => {
-    const body = await request.json().catch(() => ({}));
-    const user = authUsers.find((u) => u.email === body.email);
-    if (!user || user.password !== body.password) {
-      return HttpResponse.json({ message: "invalid credentials" }, { status: 401 });
-    }
-    return HttpResponse.json({
+const handleAuthSignup = async ({ request }) => {
+  const body = await request.json().catch(() => ({}));
+  if (!body.email || !body.password || !body.name) {
+    return HttpResponse.json({ message: "invalid input" }, { status: 400 });
+  }
+  const exists = authUsers.find((u) => u.email === body.email);
+  if (exists) {
+    return HttpResponse.json({ message: "email exists" }, { status: 409 });
+  }
+  const user = {
+    id: `usr_${Date.now()}`,
+    name: body.name,
+    email: body.email,
+    password: body.password,
+    phone: body.phone || "",
+    createdAt: new Date().toISOString(),
+  };
+  authUsers = [user, ...authUsers];
+  return HttpResponse.json(
+    {
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
-        lastLoginAt: new Date().toISOString(),
+        phone: user.phone,
+        createdAt: user.createdAt,
       },
       tokens: createTokenSet(),
-    });
-  }),
+    },
+    { status: 201 }
+  );
+};
 
-  http.post("/api/auth/logout", async ({ request }) => {
-    const body = await request.json().catch(() => ({}));
-    if (!body.refreshToken) {
-      return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
-    }
-    return new HttpResponse(null, { status: 204 });
-  }),
-
-  http.post("/api/auth/refresh", async ({ request }) => {
-    const body = await request.json().catch(() => ({}));
-    if (!body.refreshToken) {
-      return HttpResponse.json({ message: "invalid refresh token" }, { status: 401 });
-    }
-    return HttpResponse.json({
-      accessToken: `mock-access-${Date.now()}`,
-      expiresIn: 3600,
-    });
-  }),
-
-  http.get("/api/auth/me", ({ request }) => {
-    const auth = request.headers.get("authorization") || "";
-    if (!auth.startsWith("Bearer ")) {
-      return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
-    }
-    const user = authUsers[0];
-    return HttpResponse.json({
+const handleAuthLogin = async ({ request }) => {
+  const body = await request.json().catch(() => ({}));
+  const user = authUsers.find((u) => u.email === body.email);
+  if (!user || user.password !== body.password) {
+    return HttpResponse.json({ message: "invalid credentials" }, { status: 401 });
+  }
+  return HttpResponse.json({
+    user: {
       id: user.id,
       name: user.name,
       email: user.email,
-      phone: user.phone,
-      createdAt: user.createdAt,
-    });
-  }),
+      lastLoginAt: new Date().toISOString(),
+    },
+    tokens: createTokenSet(),
+  });
+};
+
+const handleAuthLogout = async ({ request }) => {
+  const body = await request.json().catch(() => ({}));
+  if (!body.refreshToken) {
+    return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
+  }
+  return new HttpResponse(null, { status: 204 });
+};
+
+const handleAuthRefresh = async ({ request }) => {
+  const body = await request.json().catch(() => ({}));
+  if (!body.refreshToken) {
+    return HttpResponse.json({ message: "invalid refresh token" }, { status: 401 });
+  }
+  return HttpResponse.json({
+    accessToken: `mock-access-${Date.now()}`,
+    expiresIn: 3600,
+  });
+};
+
+const handleAuthMe = ({ request }) => {
+  const auth = request.headers.get("authorization") || "";
+  if (!auth.startsWith("Bearer ")) {
+    return HttpResponse.json({ message: "unauthorized" }, { status: 401 });
+  }
+  const user = authUsers[0];
+  return HttpResponse.json({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    createdAt: user.createdAt,
+  });
+};
+
+const createAuthHandlers = (basePath) => [
+  http.post(`${basePath}/signup`, handleAuthSignup),
+  http.post(`${basePath}/login`, handleAuthLogin),
+  http.post(`${basePath}/logout`, handleAuthLogout),
+  http.post(`${basePath}/refresh`, handleAuthRefresh),
+  http.get(`${basePath}/me`, handleAuthMe),
+];
+
+export const handlers = [
+  ...createAuthHandlers("/api/auth"),
+  ...createAuthHandlers("/auth"),
   http.get("/api/prep/videos", () => {
     return HttpResponse.json(prepVideos);
   }),
