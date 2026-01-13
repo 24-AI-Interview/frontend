@@ -1,0 +1,47 @@
+name: Reviewer Assign
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign reviewers and assignee
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const reviewers = ['nowybb', 'yeonjelee', 'yeverycode', 'pxibvaw', 'kiraywlee'];
+            
+            (async ({github, context}) => {
+              const prAuthor = context.actor;
+              const assignees = [prAuthor];
+
+              // 작성자를 reviewers 목록에서 제외
+              const filteredReviewers = reviewers.filter(r => r !== prAuthor);
+
+              const pullRequestNumber = context.payload.pull_request.number;
+              const owner = context.repo.owner;
+              const repo = context.repo.repo;
+
+              if (filteredReviewers.length > 0) {
+                await github.rest.pulls.requestReviewers({
+                  owner,
+                  repo,
+                  pull_number: pullRequestNumber,
+                  reviewers: filteredReviewers
+                });
+              }
+
+              await github.rest.issues.addAssignees({
+                owner,
+                repo,
+                issue_number: pullRequestNumber,
+                assignees
+              });
+            })({github, context});
