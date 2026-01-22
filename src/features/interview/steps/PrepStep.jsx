@@ -17,12 +17,20 @@ export default function PrepStep({
   job,
   tab,
   level = "",
+  layout = "flow",
+  showTabs = true,
+  useBox = true,
+  hideNoQuestionsMessage = false,
+  hideNoVideosMessage = false,
   onTabChange,
   onJobChange,
   onJobConfirm,
   onQuestionsLoaded,
   onNext,
 }) {
+  const isLibrary = layout === "library";
+  const enableBookmarks = !isLibrary;
+  const shouldShowTabs = showTabs && !isLibrary;
   const [videos, setVideos] = useState([]);
   const [videosLoading, setVideosLoading] = useState(true);
   const [videosError, setVideosError] = useState("");
@@ -54,6 +62,7 @@ export default function PrepStep({
   }, []);
 
   const refreshBookmarks = useCallback(async () => {
+    if (!enableBookmarks) return;
     try {
       setBookmarksLoading(true);
       const data = await fetchPrepBookmarks();
@@ -63,13 +72,14 @@ export default function PrepStep({
     } finally {
       setBookmarksLoading(false);
     }
-  }, []);
+  }, [enableBookmarks]);
 
   useEffect(() => {
-    refreshBookmarks();
-  }, [refreshBookmarks]);
+    if (enableBookmarks) refreshBookmarks();
+  }, [enableBookmarks, refreshBookmarks]);
 
   const toggleBookmark = async (videoId) => {
+    if (!enableBookmarks) return;
     const existing = bookmarkMap.get(videoId);
     try {
       if (existing?.id) {
@@ -103,75 +113,188 @@ export default function PrepStep({
         />
       </section>
 
-      <nav className={styles.tabs}>
-        <button
-          className={tab === "videos" ? styles.activeTab : styles.tab}
-          onClick={() => onTabChange?.("videos")}
-          aria-pressed={tab === "videos"}
-        >
-          영상
-        </button>
-        <button
-          className={tab === "questions" ? styles.activeTab : styles.tab}
-          onClick={() => onTabChange?.("questions")}
-          aria-pressed={tab === "questions"}
-        >
-          질문
-        </button>
-        <button
-          className={tab === "bookmarks" ? styles.activeTab : styles.tab}
-          onClick={() => onTabChange?.("bookmarks")}
-          aria-pressed={tab === "bookmarks"}
-        >
-          북마크
-        </button>
-      </nav>
+      {shouldShowTabs && (
+        <nav className={styles.tabs}>
+          <button
+            className={tab === "videos" ? styles.activeTab : styles.tab}
+            onClick={() => onTabChange?.("videos")}
+            aria-pressed={tab === "videos"}
+          >
+            영상
+          </button>
+          <button
+            className={tab === "questions" ? styles.activeTab : styles.tab}
+            onClick={() => onTabChange?.("questions")}
+            aria-pressed={tab === "questions"}
+          >
+            질문
+          </button>
+          {enableBookmarks && (
+            <button
+              className={tab === "bookmarks" ? styles.activeTab : styles.tab}
+              onClick={() => onTabChange?.("bookmarks")}
+              aria-pressed={tab === "bookmarks"}
+            >
+              북마크
+            </button>
+          )}
+        </nav>
+      )}
+
+      {!isLibrary && (
+        <div className={styles.stepActions}>
+          <div className={styles.stepActionsInner}>
+            <div className={styles.stepCallout}>
+              <span className={styles.stepLabel}>다음 단계</span>
+              {!job || !job.includes("/") ? (
+                <div className={styles.stepHint}>직무를 선택하면 다음 단계로 이동할 수 있어요.</div>
+              ) : (
+                <div className={styles.stepHint}>환경 체크로 이동해 실전 준비를 시작하세요.</div>
+              )}
+            </div>
+            <button
+              type="button"
+              className={`${styles.stepButton} ${styles.stepButtonPrimary}`}
+              onClick={handleStart}
+              disabled={!job || !job.includes("/")}
+            >
+              환경 체크 시작
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className={styles.content}>
-        <div className={styles.box}>
-          {tab === "videos" && (
-            <VideoGrid
-              videos={videos}
-              loading={videosLoading}
-              error={videosError}
-              onToggleBookmark={toggleBookmark}
-              bookmarkMap={bookmarkMap}
-            />
-          )}
-          {tab === "questions" && (
-            <QuestionList job={job} level={level} onLoaded={onQuestionsLoaded} />
-          )}
-          {tab === "bookmarks" && (
-            <BookmarkList
-              bookmarks={bookmarks}
-              loading={bookmarksLoading}
-              error={bookmarksError}
-              onToggleBookmark={toggleBookmark}
-            />
-          )}
-        </div>
+        {useBox ? (
+          <div className={styles.box}>
+            {isLibrary ? (
+              <div className={styles.libraryStack}>
+                <section className={styles.librarySection}>
+                  <h3 className={styles.sectionTitle}>영상</h3>
+                  <VideoGrid
+                    videos={videos}
+                    loading={videosLoading}
+                    error={videosError}
+                    showBookmarks={false}
+                    hideNoVideosMessage={hideNoVideosMessage}
+                  />
+                </section>
+                <section className={styles.librarySection}>
+                  <h3 className={styles.sectionTitle}>질문</h3>
+                <QuestionList
+                  job={job}
+                  level={level}
+                  onLoaded={onQuestionsLoaded}
+                  hideNoQuestionsMessage={hideNoQuestionsMessage}
+                />
+              </section>
+            </div>
+          ) : (
+            <>
+                {tab === "videos" && (
+                  <VideoGrid
+                    videos={videos}
+                    loading={videosLoading}
+                    error={videosError}
+                    onToggleBookmark={toggleBookmark}
+                    bookmarkMap={bookmarkMap}
+                    showBookmarks={enableBookmarks}
+                    hideNoVideosMessage={hideNoVideosMessage}
+                  />
+                )}
+                {tab === "questions" && (
+                <QuestionList
+                  job={job}
+                  level={level}
+                  onLoaded={onQuestionsLoaded}
+                  hideNoQuestionsMessage={hideNoQuestionsMessage}
+                />
+              )}
+              {tab === "bookmarks" && (
+                <BookmarkList
+                    bookmarks={bookmarks}
+                    loading={bookmarksLoading}
+                    error={bookmarksError}
+                    onToggleBookmark={toggleBookmark}
+                  />
+                )}
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            {isLibrary ? (
+              <div className={styles.libraryStack}>
+                <section className={styles.librarySection}>
+                  <h3 className={styles.sectionTitle}>영상</h3>
+                  <VideoGrid
+                    videos={videos}
+                    loading={videosLoading}
+                    error={videosError}
+                    showBookmarks={false}
+                    hideNoVideosMessage={hideNoVideosMessage}
+                  />
+                </section>
+                <section className={styles.librarySection}>
+                  <h3 className={styles.sectionTitle}>질문</h3>
+                <QuestionList
+                  job={job}
+                  level={level}
+                  onLoaded={onQuestionsLoaded}
+                  hideNoQuestionsMessage={hideNoQuestionsMessage}
+                />
+              </section>
+            </div>
+          ) : (
+            <>
+                {tab === "videos" && (
+                  <VideoGrid
+                    videos={videos}
+                    loading={videosLoading}
+                    error={videosError}
+                    onToggleBookmark={toggleBookmark}
+                    bookmarkMap={bookmarkMap}
+                    showBookmarks={enableBookmarks}
+                    hideNoVideosMessage={hideNoVideosMessage}
+                  />
+                )}
+                {tab === "questions" && (
+                <QuestionList
+                  job={job}
+                  level={level}
+                  onLoaded={onQuestionsLoaded}
+                  hideNoQuestionsMessage={hideNoQuestionsMessage}
+                />
+              )}
+              {tab === "bookmarks" && (
+                <BookmarkList
+                    bookmarks={bookmarks}
+                    loading={bookmarksLoading}
+                    error={bookmarksError}
+                    onToggleBookmark={toggleBookmark}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
       </section>
-
-      <div className={styles.stepActions}>
-        <button
-          type="button"
-          className={`${styles.stepButton} ${styles.stepButtonPrimary}`}
-          onClick={handleStart}
-          disabled={!job || !job.includes("/")}
-        >
-          환경 체크 시작
-        </button>
-        {!job || !job.includes("/") ? (
-          <div className={styles.stepHint}>직무를 선택하면 다음 단계로 이동할 수 있어요.</div>
-        ) : null}
-      </div>
     </div>
   );
 }
 
-function VideoGrid({ videos, loading, error, onToggleBookmark, bookmarkMap }) {
+function VideoGrid({
+  videos,
+  loading,
+  error,
+  onToggleBookmark,
+  bookmarkMap,
+  showBookmarks = true,
+  hideNoVideosMessage = false,
+}) {
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
+  if (!videos.length && hideNoVideosMessage) return null;
   if (!videos.length) return <EmptyState message="표시할 영상이 없습니다." />;
 
   return (
@@ -191,13 +314,15 @@ function VideoGrid({ videos, loading, error, onToggleBookmark, bookmarkMap }) {
             </div>
             <div className={styles.videoBody}>
               <h3 className={styles.videoTitle}>{title}</h3>
-              <button
-                type="button"
-                className={styles.bookmarkBtn}
-                onClick={() => onToggleBookmark?.(id)}
-              >
-                {isBookmarked ? "북마크 해제" : "북마크"}
-              </button>
+              {showBookmarks && (
+                <button
+                  type="button"
+                  className={styles.bookmarkBtn}
+                  onClick={() => onToggleBookmark?.(id)}
+                >
+                  {isBookmarked ? "북마크 해제" : "북마크"}
+                </button>
+              )}
             </div>
           </article>
         );
@@ -240,7 +365,7 @@ function BookmarkList({ bookmarks, loading, error, onToggleBookmark }) {
   );
 }
 
-function QuestionList({ job, level, onLoaded }) {
+function QuestionList({ job, level, onLoaded, hideNoQuestionsMessage = false }) {
   const [items, setItems] = useState(null);
   const [err, setErr] = useState("");
   const [fetchId, setFetchId] = useState(0);
@@ -272,6 +397,7 @@ function QuestionList({ job, level, onLoaded }) {
   if (!job) return <EmptyState message="직무를 선택해주세요." />;
   if (err) return <ErrorState message={err} onRetry={handleRetry} />;
   if (items === null) return <LoadingState />;
+  if (items.length === 0 && hideNoQuestionsMessage) return null;
   if (items.length === 0)
     return <EmptyState message="선택한 직무에 해당하는 질문이 아직 준비되지 않았습니다." />;
 

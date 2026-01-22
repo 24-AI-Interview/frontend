@@ -18,6 +18,7 @@ const DEFAULT_QUESTIONS = [
 ];
 
 export default function InterviewFlowPage() {
+  const [view, setView] = useState("mock");
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState("forward");
   const [job, setJob] = useState("");
@@ -84,7 +85,7 @@ export default function InterviewFlowPage() {
   const handleJobConfirm = (nextJob) => {
     setJob(nextJob);
     setPrecheckDone(false);
-    if (tab !== "questions") setTab("questions");
+    if (view === "mock" && tab !== "questions") setTab("questions");
   };
 
   const handleNextFromPrep = () => {
@@ -114,80 +115,118 @@ export default function InterviewFlowPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <div className={styles.stepper}>
-          <div className={styles.stepList}>
-            {STEPS.map((step, idx) => {
-              const isActive = activeStep.id === step.id;
-              const isDone = idx < stepIndex;
-              const isClickable = canJumpTo(idx);
-              return (
-                <button
-                  key={step.id}
-                  type="button"
-                  className={`${styles.stepItem} ${isDone ? styles.stepDone : ""}`}
-                  aria-current={isActive ? "step" : undefined}
-                  onClick={() => isClickable && goTo(idx)}
-                  disabled={!isClickable}
-                >
-                  <span className={styles.stepIndex}>{idx + 1}</span>
-                  {step.label}
-                </button>
-              );
-            })}
-          </div>
-          <div className={styles.stepControls}>
-            <button
-              type="button"
-              className={styles.controlBtn}
-              onClick={() => goTo(Math.max(0, stepIndex - 1))}
-              disabled={stepIndex === 0}
-            >
-              이전
-            </button>
-            <button
-              type="button"
-              className={styles.controlBtn}
-              onClick={() => goTo(Math.min(STEPS.length - 1, stepIndex + 1))}
-              disabled={
-                (stepIndex === 0 && !canProceedFromPrep) ||
-                (stepIndex === 1 && !precheckDone) ||
-                stepIndex === STEPS.length - 1
-              }
-            >
-              다음
-            </button>
-          </div>
+        <div className={styles.viewTabs}>
+          <button
+            type="button"
+            className={view === "library" ? styles.viewTabActive : styles.viewTab}
+            onClick={() => setView("library")}
+            aria-pressed={view === "library"}
+          >
+            자료실
+          </button>
+          <button
+            type="button"
+            className={view === "mock" ? styles.viewTabActive : styles.viewTab}
+            onClick={() => setView("mock")}
+            aria-pressed={view === "mock"}
+          >
+            AI 모의면접
+          </button>
         </div>
+        {view === "mock" && (
+          <div className={styles.stepper}>
+            <div className={styles.stepList}>
+              {STEPS.map((step, idx) => {
+                const isActive = activeStep.id === step.id;
+                const isDone = idx < stepIndex;
+                const isClickable = canJumpTo(idx);
+                return (
+                  <button
+                    key={step.id}
+                    type="button"
+                    className={`${styles.stepItem} ${isDone ? styles.stepDone : ""}`}
+                    aria-current={isActive ? "step" : undefined}
+                    onClick={() => isClickable && goTo(idx)}
+                    disabled={!isClickable}
+                  >
+                    <span className={styles.stepIndex}>{idx + 1}</span>
+                    {step.label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className={styles.stepControls}>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                onClick={() => goTo(Math.max(0, stepIndex - 1))}
+                disabled={stepIndex === 0}
+              >
+                이전
+              </button>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                onClick={() => goTo(Math.min(STEPS.length - 1, stepIndex + 1))}
+                disabled={
+                  (stepIndex === 0 && !canProceedFromPrep) ||
+                  (stepIndex === 1 && !precheckDone) ||
+                  stepIndex === STEPS.length - 1
+                }
+              >
+                다음
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={styles.stage}>
-        <div
-          key={activeStep.id}
-          className={`${styles.stepPane} ${
-            direction === "forward" ? styles.slideInRight : styles.slideInLeft
-          }`}
-        >
-          {activeStep.id === "live" && (liveLoading || liveError) && (
-            <div className={`${styles.statusBar} ${liveError ? styles.statusError : ""}`}>
-              {liveLoading ? "실전 면접 질문을 불러오는 중..." : liveError}
-            </div>
-          )}
-          {activeStep.id === "prep" && (
+        {view === "library" ? (
+          <div key="library" className={`${styles.stepPane} ${styles.slideInRight}`}>
             <PrepStep
               job={job}
               tab={tab}
+              layout="library"
               onTabChange={setTab}
               onJobChange={handleJobChange}
               onJobConfirm={handleJobConfirm}
               onQuestionsLoaded={handleQuestionsLoaded}
-              onNext={handleNextFromPrep}
             />
-          )}
-          {activeStep.id === "precheck" && <PrecheckStep onNext={handleNextFromPrecheck} />}
-          {activeStep.id === "live" && (
-            <LiveInterviewStep job={job} questions={questions} onDone={handleRestart} />
-          )}
-        </div>
+          </div>
+        ) : (
+          <div
+            key={activeStep.id}
+            className={`${styles.stepPane} ${
+              direction === "forward" ? styles.slideInRight : styles.slideInLeft
+            }`}
+          >
+            {activeStep.id === "live" && (liveLoading || liveError) && (
+              <div className={`${styles.statusBar} ${liveError ? styles.statusError : ""}`}>
+                {liveLoading ? "실전 면접 질문을 불러오는 중..." : liveError}
+              </div>
+            )}
+            {activeStep.id === "prep" && (
+              <PrepStep
+                job={job}
+                tab={tab}
+                showTabs={false}
+                useBox={false}
+                hideNoQuestionsMessage={true}
+                hideNoVideosMessage={true}
+                onTabChange={setTab}
+                onJobChange={handleJobChange}
+                onJobConfirm={handleJobConfirm}
+                onQuestionsLoaded={handleQuestionsLoaded}
+                onNext={handleNextFromPrep}
+              />
+            )}
+            {activeStep.id === "precheck" && <PrecheckStep onNext={handleNextFromPrecheck} />}
+            {activeStep.id === "live" && (
+              <LiveInterviewStep job={job} questions={questions} onDone={handleRestart} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

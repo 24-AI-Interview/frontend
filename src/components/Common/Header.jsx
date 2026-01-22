@@ -38,9 +38,6 @@ const Header = () => {
           <NavLink to="/aptitude" className={linkClass}>
             인적성 검사
           </NavLink>
-          <NavLink to="/mypage" className={linkClass}>
-            마이페이지
-          </NavLink>
         </div>
 
         {/* 우측 버튼 */}
@@ -67,9 +64,9 @@ const Header = () => {
               <button
                 type="button"
                 className={`${styles.btn} ${styles.home}`}
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/mypage")}
               >
-                홈으로
+                마이페이지
               </button>
               <button
                 type="button"
