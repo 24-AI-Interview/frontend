@@ -7,11 +7,12 @@ export default function SignupPage() {
   const navigate = useNavigate();
   const { signup } = useAuth();
   const [form, setForm] = useState({
+    loginId: "",
     name: "",
     email: "",
     password: "",
     passwordConfirm: "",
-    phone: "",
+    phoneNumber: "",
     agree: false,
   });
   const [error, setError] = useState("");
@@ -27,26 +28,39 @@ export default function SignupPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    console.log("API URL:", `${process.env.REACT_APP_API_BASE_URL}/auth/signup`);
     if (form.password !== form.passwordConfirm) {
       setError("비밀번호가 일치하지 않습니다.");
       return;
     }
     try {
       await signup({
+        loginId: form.loginId,
         name: form.name,
         email: form.email,
         password: form.password,
-        passwordConfirm: form.passwordConfirm,
-        phone: form.phone,
-        agree: form.agree,
+        phoneNumber: form.phoneNumber ? form.phoneNumber.replace(/\D/g, "") : "",
       });
       navigate("/");
     } catch (err) {
-      const message =
-        err?.message === "API Error: 409"
-          ? "이미 사용 중인 이메일입니다."
-          : "회원가입 중 오류가 발생했습니다.";
-      setError(message);
+      const code = err?.body?.code;
+      if (code === 2100) {
+        setError("요청 값이 올바르지 않습니다.");
+        return;
+      }
+      if (code === 2101) {
+        setError("이미 사용 중인 아이디입니다.");
+        return;
+      }
+      if (code === 2102) {
+        setError("이미 사용 중인 이메일입니다.");
+        return;
+      }
+      if (code === 2103) {
+        setError("이미 사용 중인 전화번호입니다.");
+        return;
+      }
+      setError(err?.body?.message || "회원가입 중 오류가 발생했습니다.");
     }
   };
 
@@ -82,6 +96,19 @@ export default function SignupPage() {
           <p className={styles.cardDesc}>3분만에 계정을 만들고 시작하세요.</p>
 
           <form className={styles.form} onSubmit={handleSubmit}>
+            <label className={styles.field}>
+              <span className={styles.label}>아이디</span>
+              <input
+                className={styles.input}
+                type="text"
+                name="loginId"
+                placeholder="아이디를 입력해주세요"
+                value={form.loginId}
+                onChange={handleChange}
+                required
+              />
+            </label>
+
             <label className={styles.field}>
               <span className={styles.label}>이름</span>
               <input
@@ -139,9 +166,9 @@ export default function SignupPage() {
               <input
                 className={styles.input}
                 type="tel"
-                name="phone"
+                name="phoneNumber"
                 placeholder="010-0000-0000"
-                value={form.phone}
+                value={form.phoneNumber}
                 onChange={handleChange}
               />
               <span className={styles.helper}>선택 입력입니다.</span>

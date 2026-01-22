@@ -1,6 +1,10 @@
 import { clearTokens, getAccessToken, getRefreshToken, setTokens } from "../auth/authStorage";
 
-const BASE_URL = "/api";
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+if (!BASE_URL) {
+  throw new Error("REACT_APP_API_BASE_URL is not defined");
+}
 let refreshPromise = null;
 
 const shouldSkipRefresh = (path, options = {}) => {
@@ -75,6 +79,14 @@ async function request(path, options = {}) {
     const error = new Error(`API Error: ${res.status}`);
     error.status = res.status;
     error.response = res;
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      try {
+        error.body = await res.json();
+      } catch {
+        // Ignore JSON parse errors for error payloads.
+      }
+    }
     throw error;
   }
 
