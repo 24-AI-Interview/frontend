@@ -4,21 +4,31 @@ import { useLocation /*, useNavigate */ } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import PageHero from "../../components/Common/PageHero";
 import styles from "./InterviewSessionPage.module.css";
+import { getQuestionsForJob } from "../../data/interviewQuestionsByJob";
 
 export default function InterviewSessionPage() {
   const { state } = useLocation();
   // const navigate = useNavigate();
 
-  const questions =
-    Array.isArray(state?.questions) && state.questions.length > 0
-      ? state.questions
-      : [
-          "우리 회사에 지원하게 된 동기는 무엇인가요?",
-          "최근에 해결한 기술적 문제와 접근 방법을 설명해 주세요.",
-          "협업 과정에서 갈등을 해결한 경험을 말해 주세요.",
-        ];
+  const defaultQuestions = useMemo(
+    () => [
+      "우리 회사에 지원하게 된 동기는 무엇인가요?",
+      "최근에 해결한 기술적 문제와 접근 방법을 설명해 주세요.",
+      "협업 과정에서 갈등을 해결한 경험을 말해 주세요.",
+    ],
+    []
+  );
+
   const job =
     state?.job || "경영·인사·총무·사무/인사·인재개발·채용·교육·HR";
+
+  const questions = useMemo(() => {
+    if (Array.isArray(state?.questions) && state.questions.length > 0) {
+      return state.questions;
+    }
+    const fromCsv = getQuestionsForJob(job);
+    return fromCsv.length > 0 ? fromCsv : defaultQuestions;
+  }, [defaultQuestions, job, state?.questions]);
 
   // ===== 인트로(5초 안내) → 질문 단계 전환 =====
   const [phase, setPhase] = useState("intro"); // 'intro' | 'question'

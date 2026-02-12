@@ -2,7 +2,7 @@
 
 .page {
   padding: 24px;
-  background: #f7faff;
+  background: var(--app-bg);
 }
 
 /* 카드 래퍼 */

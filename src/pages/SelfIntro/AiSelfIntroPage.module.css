@@ -4,7 +4,7 @@
 
 /* 페이지 전체 배경 및 기본 레이아웃 */
 .page {
-  background: #ebf5fd;
+  background: var(--app-bg);
   min-height: 100vh;
 }
 

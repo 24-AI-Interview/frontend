@@ -19,7 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "gen:interview-questions": "python3 scripts/generate-interview-questions.py"
   },
   "eslintConfig": {
     "extends": [

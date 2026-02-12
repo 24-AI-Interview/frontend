@@ -1,10 +1,6 @@
 import { clearTokens, getAccessToken, getRefreshToken, setTokens } from "../auth/authStorage";
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-if (!BASE_URL) {
-  throw new Error("REACT_APP_API_BASE_URL is not defined");
-}
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "/api";
 let refreshPromise = null;
 
 const shouldSkipRefresh = (path, options = {}) => {

@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import PrepStep from "../../features/interview/steps/PrepStep";
 import PrecheckStep from "../../features/interview/steps/PrecheckStep";
 import LiveInterviewStep from "../../features/interview/steps/LiveInterviewStep";
-import { fetchInterviewQuestions } from "../../api/interview";
 import styles from "./InterviewFlowPage.module.css";
+import { getQuestionsForJob } from "../../data/interviewQuestionsByJob";
 
 const STEPS = [
   { id: "prep", label: "면접 준비" },
@@ -25,43 +25,21 @@ export default function InterviewFlowPage() {
   const [questions, setQuestions] = useState(DEFAULT_QUESTIONS);
   const [tab, setTab] = useState("videos");
   const [precheckDone, setPrecheckDone] = useState(false);
-  const [liveLoading, setLiveLoading] = useState(false);
-  const [liveError, setLiveError] = useState("");
+  const resolveQuestions = useCallback(
+    (nextJob) => {
+      if (!nextJob) return DEFAULT_QUESTIONS;
+      const fromCsv = getQuestionsForJob(nextJob);
+      return fromCsv.length > 0 ? fromCsv : DEFAULT_QUESTIONS;
+    },
+    []
+  );
 
   const canProceedFromPrep = Boolean(job && job.includes("/"));
   const activeStep = STEPS[stepIndex];
 
   useEffect(() => {
-    if (!job) {
-      setQuestions(DEFAULT_QUESTIONS);
-      return;
-    }
-    setQuestions(DEFAULT_QUESTIONS);
-  }, [job]);
-
-  useEffect(() => {
-    if (activeStep.id !== "live") return;
-    let ignore = false;
-    (async () => {
-      try {
-        setLiveError("");
-        setLiveLoading(true);
-        const data = await fetchInterviewQuestions({ job });
-        if (ignore) return;
-        const list = Array.isArray(data)
-          ? data.map((item) => item.question).filter(Boolean)
-          : [];
-        if (list.length) setQuestions(list);
-      } catch (e) {
-        if (!ignore) setLiveError("실전 면접 질문을 불러오지 못했습니다. 기본 질문으로 진행합니다.");
-      } finally {
-        if (!ignore) setLiveLoading(false);
-      }
-    })();
-    return () => {
-      ignore = true;
-    };
-  }, [activeStep.id, job]);
+    setQuestions(resolveQuestions(job));
+  }, [job, resolveQuestions]);
 
   const goTo = useCallback(
     (nextIndex) => {
@@ -86,6 +64,7 @@ export default function InterviewFlowPage() {
     setJob(nextJob);
     setPrecheckDone(false);
     if (view === "mock" && tab !== "questions") setTab("questions");
+    if (view === "mock") goTo(1);
   };
 
   const handleNextFromPrep = () => {
@@ -155,28 +134,6 @@ export default function InterviewFlowPage() {
                 );
               })}
             </div>
-            <div className={styles.stepControls}>
-              <button
-                type="button"
-                className={styles.controlBtn}
-                onClick={() => goTo(Math.max(0, stepIndex - 1))}
-                disabled={stepIndex === 0}
-              >
-                이전
-              </button>
-              <button
-                type="button"
-                className={styles.controlBtn}
-                onClick={() => goTo(Math.min(STEPS.length - 1, stepIndex + 1))}
-                disabled={
-                  (stepIndex === 0 && !canProceedFromPrep) ||
-                  (stepIndex === 1 && !precheckDone) ||
-                  stepIndex === STEPS.length - 1
-                }
-              >
-                다음
-              </button>
-            </div>
           </div>
         )}
       </div>
@@ -201,11 +158,6 @@ export default function InterviewFlowPage() {
               direction === "forward" ? styles.slideInRight : styles.slideInLeft
             }`}
           >
-            {activeStep.id === "live" && (liveLoading || liveError) && (
-              <div className={`${styles.statusBar} ${liveError ? styles.statusError : ""}`}>
-                {liveLoading ? "실전 면접 질문을 불러오는 중..." : liveError}
-              </div>
-            )}
             {activeStep.id === "prep" && (
               <PrepStep
                 job={job}
@@ -214,6 +166,7 @@ export default function InterviewFlowPage() {
                 useBox={false}
                 hideNoQuestionsMessage={true}
                 hideNoVideosMessage={true}
+                hideStatusMessages={true}
                 onTabChange={setTab}
                 onJobChange={handleJobChange}
                 onJobConfirm={handleJobConfirm}

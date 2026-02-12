@@ -1,6 +1,7 @@
 /* 공통 히어로 (배경은 페이지가 결정) */
 .page-hero {
   padding: 50px 16px 20px; /* 상단 여백, 하단 살짝 */
+  background: var(--app-bg);
 }
 
 /* 가운데 고정 폭 + 중앙정렬 */
