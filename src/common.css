@@ -1,0 +1,19 @@
+:root {
+  --app-bg: #ffffff;
+  --c-ink: #1f2a44;
+  --c-muted: #6b7785;
+  --c-border: #d9e6f2;
+  --c-surface: #ffffff;
+  --c-accent: #0b64c0;
+}
+
+body {
+  background: var(--app-bg);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--app-bg);
+}

@@ -80,9 +80,9 @@ export default function SelfIntroPage() {
       // 검색어 필터
       const inSearch =
         !term ||
-        it.title.toLowerCase().includes(term) ||
-        (it.company || "").toLowerCase().includes(term) ||
-        (it.body || "").toLowerCase().includes(term);
+        String(it.title || "").toLowerCase().includes(term) ||
+        String(it.company || "").toLowerCase().includes(term) ||
+        String(it.body || "").toLowerCase().includes(term);
 
       if (!inSearch) return false;
 
@@ -90,20 +90,29 @@ export default function SelfIntroPage() {
       if (period === "all") return true;
       const days = Number(period);
       const from = Date.now() - days * 24 * 60 * 60 * 1000;
-      return new Date(it.updatedAt).getTime() >= from;
+      const updatedAt = new Date(it.updatedAt).getTime();
+      return (Number.isFinite(updatedAt) ? updatedAt : 0) >= from;
     });
 
     // 정렬
     switch (sort) {
       case "oldest":
-        arr.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+        arr.sort((a, b) => {
+          const at = new Date(a.updatedAt).getTime();
+          const bt = new Date(b.updatedAt).getTime();
+          return (Number.isFinite(at) ? at : 0) - (Number.isFinite(bt) ? bt : 0);
+        });
         break;
       case "title":
-        arr.sort((a, b) => a.title.localeCompare(b.title));
+        arr.sort((a, b) => String(a.title || "").localeCompare(String(b.title || "")));
         break;
       case "latest":
       default:
-        arr.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        arr.sort((a, b) => {
+          const at = new Date(a.updatedAt).getTime();
+          const bt = new Date(b.updatedAt).getTime();
+          return (Number.isFinite(bt) ? bt : 0) - (Number.isFinite(at) ? at : 0);
+        });
     }
     return arr;
   }, [items, search, sort, period]);

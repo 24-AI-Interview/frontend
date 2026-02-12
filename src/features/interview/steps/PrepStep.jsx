@@ -22,6 +22,7 @@ export default function PrepStep({
   useBox = true,
   hideNoQuestionsMessage = false,
   hideNoVideosMessage = false,
+  hideStatusMessages = false,
   onTabChange,
   onJobChange,
   onJobConfirm,
@@ -93,11 +94,6 @@ export default function PrepStep({
     }
   };
 
-  const handleStart = () => {
-    if (!job || !job.includes("/")) return;
-    onNext?.();
-  };
-
   return (
     <div className={styles.wrapper}>
       <PageHero
@@ -141,29 +137,6 @@ export default function PrepStep({
         </nav>
       )}
 
-      {!isLibrary && (
-        <div className={styles.stepActions}>
-          <div className={styles.stepActionsInner}>
-            <div className={styles.stepCallout}>
-              <span className={styles.stepLabel}>다음 단계</span>
-              {!job || !job.includes("/") ? (
-                <div className={styles.stepHint}>직무를 선택하면 다음 단계로 이동할 수 있어요.</div>
-              ) : (
-                <div className={styles.stepHint}>환경 체크로 이동해 실전 준비를 시작하세요.</div>
-              )}
-            </div>
-            <button
-              type="button"
-              className={`${styles.stepButton} ${styles.stepButtonPrimary}`}
-              onClick={handleStart}
-              disabled={!job || !job.includes("/")}
-            >
-              환경 체크 시작
-            </button>
-          </div>
-        </div>
-      )}
-
       <section className={styles.content}>
         {useBox ? (
           <div className={styles.box}>
@@ -186,6 +159,7 @@ export default function PrepStep({
                   level={level}
                   onLoaded={onQuestionsLoaded}
                   hideNoQuestionsMessage={hideNoQuestionsMessage}
+                  hideStatusMessages={hideStatusMessages}
                 />
               </section>
             </div>
@@ -200,6 +174,7 @@ export default function PrepStep({
                     bookmarkMap={bookmarkMap}
                     showBookmarks={enableBookmarks}
                     hideNoVideosMessage={hideNoVideosMessage}
+                    hideStatusMessages={hideStatusMessages}
                   />
                 )}
                 {tab === "questions" && (
@@ -208,6 +183,7 @@ export default function PrepStep({
                   level={level}
                   onLoaded={onQuestionsLoaded}
                   hideNoQuestionsMessage={hideNoQuestionsMessage}
+                  hideStatusMessages={hideStatusMessages}
                 />
               )}
               {tab === "bookmarks" && (
@@ -216,6 +192,7 @@ export default function PrepStep({
                     loading={bookmarksLoading}
                     error={bookmarksError}
                     onToggleBookmark={toggleBookmark}
+                    hideStatusMessages={hideStatusMessages}
                   />
                 )}
               </>
@@ -242,6 +219,7 @@ export default function PrepStep({
                   level={level}
                   onLoaded={onQuestionsLoaded}
                   hideNoQuestionsMessage={hideNoQuestionsMessage}
+                  hideStatusMessages={hideStatusMessages}
                 />
               </section>
             </div>
@@ -256,6 +234,7 @@ export default function PrepStep({
                     bookmarkMap={bookmarkMap}
                     showBookmarks={enableBookmarks}
                     hideNoVideosMessage={hideNoVideosMessage}
+                    hideStatusMessages={hideStatusMessages}
                   />
                 )}
                 {tab === "questions" && (
@@ -264,6 +243,7 @@ export default function PrepStep({
                   level={level}
                   onLoaded={onQuestionsLoaded}
                   hideNoQuestionsMessage={hideNoQuestionsMessage}
+                  hideStatusMessages={hideStatusMessages}
                 />
               )}
               {tab === "bookmarks" && (
@@ -272,6 +252,7 @@ export default function PrepStep({
                     loading={bookmarksLoading}
                     error={bookmarksError}
                     onToggleBookmark={toggleBookmark}
+                    hideStatusMessages={hideStatusMessages}
                   />
                 )}
               </>
@@ -291,11 +272,15 @@ function VideoGrid({
   bookmarkMap,
   showBookmarks = true,
   hideNoVideosMessage = false,
+  hideStatusMessages = false,
 }) {
-  if (loading) return <LoadingState />;
-  if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
+  if (loading) return hideStatusMessages ? null : <LoadingState />;
+  if (error)
+    return hideStatusMessages ? null : (
+      <ErrorState message={error} onRetry={() => window.location.reload()} />
+    );
   if (!videos.length && hideNoVideosMessage) return null;
-  if (!videos.length) return <EmptyState message="표시할 영상이 없습니다." />;
+  if (!videos.length) return hideStatusMessages ? null : <EmptyState message="표시할 영상이 없습니다." />;
 
   return (
     <div className={styles.videoGrid}>
@@ -331,10 +316,14 @@ function VideoGrid({
   );
 }
 
-function BookmarkList({ bookmarks, loading, error, onToggleBookmark }) {
-  if (loading) return <LoadingState />;
-  if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
-  if (!bookmarks.length) return <EmptyState message="북마크한 영상이 없습니다." />;
+function BookmarkList({ bookmarks, loading, error, onToggleBookmark, hideStatusMessages = false }) {
+  if (loading) return hideStatusMessages ? null : <LoadingState />;
+  if (error)
+    return hideStatusMessages ? null : (
+      <ErrorState message={error} onRetry={() => window.location.reload()} />
+    );
+  if (!bookmarks.length)
+    return hideStatusMessages ? null : <EmptyState message="북마크한 영상이 없습니다." />;
   const items = bookmarks.map((b) => b.video).filter(Boolean);
   return (
     <div className={styles.videoGrid}>
@@ -365,7 +354,13 @@ function BookmarkList({ bookmarks, loading, error, onToggleBookmark }) {
   );
 }
 
-function QuestionList({ job, level, onLoaded, hideNoQuestionsMessage = false }) {
+function QuestionList({
+  job,
+  level,
+  onLoaded,
+  hideNoQuestionsMessage = false,
+  hideStatusMessages = false,
+}) {
   const [items, setItems] = useState(null);
   const [err, setErr] = useState("");
   const [fetchId, setFetchId] = useState(0);
@@ -394,12 +389,14 @@ function QuestionList({ job, level, onLoaded, hideNoQuestionsMessage = false }) 
 
   const handleRetry = () => setFetchId((n) => n + 1);
 
-  if (!job) return <EmptyState message="직무를 선택해주세요." />;
-  if (err) return <ErrorState message={err} onRetry={handleRetry} />;
-  if (items === null) return <LoadingState />;
+  if (!job) return hideStatusMessages ? null : <EmptyState message="직무를 선택해주세요." />;
+  if (err) return hideStatusMessages ? null : <ErrorState message={err} onRetry={handleRetry} />;
+  if (items === null) return hideStatusMessages ? null : <LoadingState />;
   if (items.length === 0 && hideNoQuestionsMessage) return null;
   if (items.length === 0)
-    return <EmptyState message="선택한 직무에 해당하는 질문이 아직 준비되지 않았습니다." />;
+    return hideStatusMessages ? null : (
+      <EmptyState message="선택한 직무에 해당하는 질문이 아직 준비되지 않았습니다." />
+    );
 
   return (
     <ul className={styles.questionList}>
