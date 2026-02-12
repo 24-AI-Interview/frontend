@@ -40,21 +40,41 @@ const PERIOD_OPTIONS = [
 ];
 
 const nowISO = () => new Date().toISOString();
+const DISABLE_API = true;
+const SAMPLE_ITEMS = [
+  {
+    id: "si-1",
+    title: "새 자기소개서",
+    company: "샘플 기업",
+    stage: "draft",
+    updatedAt: nowISO(),
+    body: "지원 동기와 경험을 간단히 정리한 예시 자기소개서입니다.",
+  },
+  {
+    id: "si-2",
+    title: "2025 상반기 지원서",
+    company: "예시 테크",
+    stage: "round1",
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    body: "프로젝트 경험과 직무 적합성을 강조했습니다.",
+  },
+];
 
 export default function SelfIntroPage() {
   const navigate = useNavigate();
 
   /* 상태 정의 */
-  const [items, setItems] = useState([]); 
+  const [items, setItems] = useState(DISABLE_API ? SAMPLE_ITEMS : []); 
   const [search, setSearch] = useState(""); 
   const [sort, setSort] = useState(SORT_OPTIONS[0].id); 
   const [period, setPeriod] = useState(PERIOD_OPTIONS[0].id); 
   const [editing, setEditing] = useState(null); 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(!DISABLE_API);
+  const [, setError] = useState("");
 
   /* API에서 데이터 불러오기 */
   useEffect(() => {
+    if (DISABLE_API) return;
     let ignore = false;
     (async () => {
       try {
@@ -63,7 +83,11 @@ export default function SelfIntroPage() {
         const data = await fetchSelfIntros();
         if (!ignore) setItems(Array.isArray(data) ? data : []);
       } catch (e) {
-        if (!ignore) setError("자기소개서 목록을 불러오는 데 실패했습니다.");
+        if (!ignore) {
+          // API 실패 시에도 페이지는 표시
+          setItems([]);
+          setError("");
+        }
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -204,10 +228,6 @@ export default function SelfIntroPage() {
 
   if (loading) {
     return <div className={styles.page}>불러오는 중...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.page}>{error}</div>;
   }
 
   return (
