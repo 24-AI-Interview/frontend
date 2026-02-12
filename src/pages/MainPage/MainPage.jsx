@@ -1,5 +1,22 @@
 import React, { useEffect } from "react";
 import styles from "./MainPage.module.css";
+import boomImg from "../../assets/boom.png";
+import questionImg from "../../assets/question.png";
+import sadImg from "../../assets/sad.png";
+import iconPrep from "../../assets/icon-prep.png";
+import iconAi from "../../assets/icon-ai.png";
+import logoCj from "../../assets/logo-cj.png";
+import logoCoupang from "../../assets/logo-coupang.png";
+import logoHanwha from "../../assets/logo-hanwha.png";
+import logoHyundai from "../../assets/logo-hyundai.svg";
+import logoKt from "../../assets/logo-kt.png";
+import logoLg from "../../assets/logo-lg.png";
+import logoLine from "../../assets/logo-line.png";
+import logoLotte from "../../assets/logo-lotte.jpg";
+import logoNaver from "../../assets/logo-naver.png";
+import logoSamsung from "../../assets/logo-samsung.png";
+import logoSk from "../../assets/logo-sk.png";
+import logoToss from "../../assets/logo-toss.webp";
 
 /* ===== Hero ===== */
 const Hero = () => (
@@ -49,7 +66,7 @@ const PainCards = () => (
     <div className={styles.cardGrid3}>
       <article className={`${styles.problemCard} ${styles.surfaceLight}`}>
         <div className={styles.cardMedia}>
-          <img src="/assets/boom.png" alt="" />
+          <img src={boomImg} alt="" />
         </div>
         <h3>제가 했던 프로젝트가 자세히<br></br>기억이 안 나요.</h3>
         <p>
@@ -59,7 +76,7 @@ const PainCards = () => (
 
       <article className={`${styles.problemCard} ${styles.surfaceMuted}`}>
         <div className={styles.cardMedia}>
-          <img src="/assets/question.png" alt="" />
+          <img src={questionImg} alt="" />
         </div>
         <h3>면접에서 무엇을 물어볼지<br></br>감이 잘 안와요.</h3>
         <p>어떤 경험과 활동을 중요하게 볼지 알기 어렵고, 준비해야 할 질문이 많아 보여 막막해요.</p>
@@ -67,7 +84,7 @@ const PainCards = () => (
 
       <article className={`${styles.problemCard} ${styles.surfaceAlt}`}>
         <div className={styles.cardMedia}>
-          <img src="/assets/sad.png" alt="" />
+          <img src={sadImg} alt="" />
         </div>
         <h3>면접관 앞에만 서면<br></br>긴장해서 말을 잘 못해요.</h3>
         <p>실전과 비슷한 환경에서<br></br>반복 연습할 기회가 필요해요.</p>
@@ -127,13 +144,25 @@ const Aptitude = () => (
   <section className={`${styles.sectionBase} ${styles.assessmentSection}`}>
     <div className={styles.aptitudeInner}>
       <div className={styles.logoGrid}>
-        {["samsung", "sk", "cj", "kt"].map((brand) => (
-          <div key={brand} className={styles.logoCell}>
-            <img src={`/assets/logo-${brand}.png`} alt={`${brand} logo`} />
+        {[
+          { id: "samsung", src: logoSamsung, label: "Samsung" },
+          { id: "sk", src: logoSk, label: "SK" },
+          { id: "cj", src: logoCj, label: "CJ" },
+          { id: "kt", src: logoKt, label: "KT" },
+          { id: "lg", src: logoLg, label: "LG" },
+          { id: "naver", src: logoNaver, label: "Naver" },
+          { id: "line", src: logoLine, label: "Line" },
+          { id: "lotte", src: logoLotte, label: "Lotte" },
+          { id: "hyundai", src: logoHyundai, label: "Hyundai" },
+          { id: "hanwha", src: logoHanwha, label: "Hanwha" },
+          { id: "coupang", src: logoCoupang, label: "Coupang" },
+          { id: "toss", src: logoToss, label: "Toss" },
+        ]
+          .slice(0, 12)
+          .map((brand) => (
+          <div key={brand.id} className={styles.logoCell}>
+            <img src={brand.src} alt={`${brand.label} logo`} />
           </div>
-        ))}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={`empty-${i}`} className={styles.logoCell}></div>
         ))}
       </div>
 
@@ -183,13 +212,13 @@ const AiBlocks = () => (
 
     <div className={styles.cardGrid2}>
       <article className={styles.serviceCard}>
-        <img src="/assets/icon-prep.png" alt="prep" className={styles.serviceIcon} />
+        <img src={iconPrep} alt="prep" className={styles.serviceIcon} />
         <h3>면접 대비</h3>
         <p>온/오프라인 면접을 대비한 서비스입니다.</p>
       </article>
 
       <article className={styles.serviceCard}>
-        <img src="/assets/icon-ai.png" alt="ai" className={styles.serviceIcon} />
+        <img src={iconAi} alt="ai" className={styles.serviceIcon} />
         <h3>AI 면접</h3>
         <p>온/오프라인 면접을 대비한 서비스입니다.</p>
       </article>
